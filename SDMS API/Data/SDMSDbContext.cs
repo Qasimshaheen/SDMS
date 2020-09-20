@@ -21,5 +21,7 @@ namespace SDMS_API.Data
 
         public DbSet<MeasureUnit> MeasureUnits { get; set; }
 
+        public DbSet<ChartofAccount> ChartofAccounts { get; set; }
+
     }
 }

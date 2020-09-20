@@ -27,6 +27,39 @@ namespace SDMS_API.Data
         public DateTime CreatedDate { get; set; }
 
 
+        [ForeignKey(nameof(TblInventoryChartOfAccount))]
+
+        public int? InventoryCOAId { get; set; }
+        public ChartofAccount TblInventoryChartOfAccount { get; set; }
+
+
+
+
+        [ForeignKey(nameof(TblSaleChartOfAccount))]
+
+        public int? SaleCOAId { get; set; }
+        public ChartofAccount TblSaleChartOfAccount { get; set; }
+
+
+
+        [ForeignKey(nameof(TblSaleReturnChartOfAccount))]
+
+        public int? SaleReturnCOAId { get; set; }
+        public ChartofAccount TblSaleReturnChartOfAccount { get; set; }
+
+
+
+        [ForeignKey(nameof(TblSaleDiscountChartOfAccount))]
+
+        public int? SaleDiscountCOAId { get; set; }
+        public ChartofAccount TblSaleDiscountChartOfAccount { get; set; }
+
+
+
+        [ForeignKey(nameof(TblCostOfGoodsSoldChartOfAccount))]
+
+        public int? CostOfGoodsSoldCOAId { get; set; }
+        public ChartofAccount TblCostOfGoodsSoldChartOfAccount { get; set; }
 
 
         [ForeignKey(nameof(MeasureUnitID))]
