@@ -1,0 +1,22 @@
+﻿string lastProductCode = string.Empty;
+
+var LastProduct = dbContext.Products.AsNoTracking().OrderByDescending(x => x.Id).FirstOrDefault();
+
+if (LastProduct != null)
+    lastProductCode = LastProduct.Code;
+
+var product = new Product()
+{
+    Code = lastProductCode.GenerateNextCode("PC"),
+    ActualPrice = 150,
+    CategoryId = 1,
+    CreatedDate = DateTime.Now,
+    IsActive = true,
+    MeasureUnitID = 1,
+    Remarks = null,
+    RetailPrice = 170
+};
+
+dbContext.Products.Add(product);
+
+dbContext.SaveChanges();
