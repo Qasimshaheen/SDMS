@@ -23,5 +23,7 @@ namespace SDMS_API.Data
 
         public DbSet<ChartofAccount> ChartofAccounts { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<Company> Companies { get; set; }
+
     }
 }
