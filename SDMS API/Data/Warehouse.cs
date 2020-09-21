@@ -13,5 +13,7 @@ namespace SDMS_API.Data
         public string Name { get; set; }
         [StringLength(80)]
         public string Address { get; set; }
+        public List<Company> Companies { get; set; }
+
     }
 }
