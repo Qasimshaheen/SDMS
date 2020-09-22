@@ -10,8 +10,8 @@ using SDMS_API.Data;
 namespace SDMS_API.Migrations
 {
     [DbContext(typeof(SDMSDbContext))]
-    [Migration("20200921191837_AddedUserRights")]
-    partial class AddedUserRights
+    [Migration("20200922150600_AddedUserRightsEntity")]
+    partial class AddedUserRightsEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
