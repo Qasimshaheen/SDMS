@@ -14,7 +14,7 @@ namespace SDMS_API.Data
         public User User { get; set; }
         public int MenueId { get; set; }
         [ForeignKey(nameof(MenueId))]
-        public Menue Menue { get; set; }
+        public Menu Menue { get; set; }
         public bool IsAllow { get; set; }
         public bool IsPost { get; set; }
 

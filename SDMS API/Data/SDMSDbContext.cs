@@ -24,8 +24,9 @@ namespace SDMS_API.Data
         public DbSet<ChartofAccount> ChartofAccounts { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Company> Companies { get; set; }
-        public DbSet<Menue> Menues { get; set; }
+        public DbSet<Menu> Menues { get; set; }
         public DbSet<UserRight> UserRights { get; set; }
-
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Customer> Customers { get; set; }
     }
 }

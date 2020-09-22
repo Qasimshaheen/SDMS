@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SDMS_API.Data
 {
-    public class Menue
+    public class Menu
     {
         public int Id { get; set; }
         [StringLength(50)]
@@ -15,8 +15,8 @@ namespace SDMS_API.Data
         public bool IsReport { get; set; }
         public int? ParentMenueId { get; set; }
         [ForeignKey(nameof(ParentMenueId))]
-        public Menue TblParentMenue { get; set; }
-        public List<Menue> TblChildMenues { get; set; }
+        public Menu TblParentMenue { get; set; }
+        public List<Menu> TblChildMenues { get; set; }
         public List<UserRight> UserRights { get; set; }
 
 
