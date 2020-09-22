@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SDMS_API.Data
 {
@@ -14,7 +15,7 @@ namespace SDMS_API.Data
 
         [StringLength(50)]
         public string Password { get; set; }
-
         public bool IsActive { get; set; }
+        public List<UserRight> UserRights { get; set; }
     }
 }

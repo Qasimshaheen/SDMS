@@ -17,6 +17,8 @@ namespace SDMS_API.Data
         [ForeignKey(nameof(ParentMenueId))]
         public Menue TblParentMenue { get; set; }
         public List<Menue> TblChildMenues { get; set; }
+        public List<UserRight> UserRights { get; set; }
+
 
     }
 }

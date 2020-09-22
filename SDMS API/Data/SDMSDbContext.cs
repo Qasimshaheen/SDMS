@@ -25,6 +25,7 @@ namespace SDMS_API.Data
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Menue> Menues { get; set; }
+        public DbSet<UserRight> UserRights { get; set; }
 
     }
 }
