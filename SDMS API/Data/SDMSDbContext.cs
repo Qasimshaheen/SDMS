@@ -14,13 +14,9 @@ namespace SDMS_API.Data
         }
 
         public DbSet<User> Users { get; set; }
-
         public DbSet<Product> Products { get; set; }
-
         public DbSet<ProductCategory> ProductCategories { get; set; }
-
         public DbSet<MeasureUnit> MeasureUnits { get; set; }
-
         public DbSet<ChartofAccount> ChartofAccounts { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Company> Companies { get; set; }
@@ -28,5 +24,6 @@ namespace SDMS_API.Data
         public DbSet<UserRight> UserRights { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
     }
 }

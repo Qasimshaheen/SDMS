@@ -44,6 +44,8 @@ namespace SDMS_API.Data
         [InverseProperty("TblCostOfGoodsSoldChartOfAccount")]
         public List<Product> TblCostOfGoodsSoldProducts { get; set; }
         public List<Customer> Customers { get; set; }
+        public List<Vendor> Vendors { get; set; }
+
     }
 }
 

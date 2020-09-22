@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200921191837_AddedUserRights.cs" />
     <Compile Remove="Migrations\20200921191837_AddedUserRights.Designer.cs" />
+    <Compile Remove="Migrations\20200922162834_AddedVendorEntity.cs" />
+    <Compile Remove="Migrations\20200922162834_AddedVendorEntity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
