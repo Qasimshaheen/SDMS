@@ -25,5 +25,14 @@ namespace SDMS_API.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Bank> Bank { get; set; }
+        public DbSet<BankAccoountDetail> BankAccoountDetails { get; set; }
+        public DbSet<BankAccountType> BankAccountTypes { get; set; }
+        public DbSet<CustomerOpeningBalanceMaster> CustomerOpeningBalanceMasters { get; set; }
+        public DbSet<CustomerOpeningBalanceDetail> CustomerOpeningBalanceDetails { get; set; }
+        public DbSet<VendorOpeningBalanceMaster> vendorOpeningBalanceMasters { get; set; }
+        public DbSet<VendorOpeningBalanceDetail> vendorOpeningBalanceDetails { get; set; }
+        public DbSet<VoucherMaster> VoucherMasters { get; set; }
+        public DbSet<VoucherDetail> VoucherDetails { get; set; }
     }
 }

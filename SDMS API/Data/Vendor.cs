@@ -23,15 +23,12 @@ namespace SDMS_API.Data
         public string Email { get; set; }
         [StringLength(80)]
         public string Address { get; set; }
-        public decimal? OpeningBalance { get; set; }
-        public decimal? OpeningReceipt { get; set; }
-        public decimal? OpeningAdvance { get; set; }
-        public decimal? Advance { get; set; }
-        public decimal? Balance { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey(nameof(COAId))]
         public ChartofAccount TblChartofAccount { get; set; }
         [ForeignKey(nameof(CityId))]
         public City TblCity { get; set; }
+        public List<VoucherDetail> VoucherDetails { get; set; }
+
     }
 }
