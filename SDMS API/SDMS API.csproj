@@ -10,6 +10,10 @@
     <Compile Remove="Migrations\20200921191837_AddedUserRights.Designer.cs" />
     <Compile Remove="Migrations\20200922162834_AddedVendorEntity.cs" />
     <Compile Remove="Migrations\20200922162834_AddedVendorEntity.Designer.cs" />
+    <Compile Remove="Migrations\20200925184935_AddedBankOpeningsAndUpdatedCustomerAndVendorOpenings.cs" />
+    <Compile Remove="Migrations\20200925184935_AddedBankOpeningsAndUpdatedCustomerAndVendorOpenings.Designer.cs" />
+    <Compile Remove="Migrations\20200925185258_AddedBankOpeningsAndUpdatedCustomerAndVendorOpenings.cs" />
+    <Compile Remove="Migrations\20200925185258_AddedBankOpeningsAndUpdatedCustomerAndVendorOpenings.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

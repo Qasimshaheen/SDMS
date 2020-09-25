@@ -6,7 +6,7 @@ namespace SDMS_API.Data
     {
         public int Id { get; set; }
         public int BankOBMId { get; set; }
-        public int BankAccountDetailId { get; set; }
+        public int? BankAccountDetailId { get; set; }
         public decimal OpeningBalance { get; set; }
         [ForeignKey(nameof(BankAccountDetailId))]
         public BankAccoountDetail TblBankAccoountDetail { get; set; }

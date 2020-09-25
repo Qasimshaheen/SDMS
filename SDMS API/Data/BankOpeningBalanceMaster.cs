@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SDMS_API.Data
@@ -12,5 +13,6 @@ namespace SDMS_API.Data
         public bool IsPosted { get; set; }
         [ForeignKey(nameof(VoucherMasterId))]
         public VoucherMaster TblVoucherMaster { get; set; }
+        public List<BankOpeningBalanceDetail> TblbankOpeningBalanceDetails { get; set; }
     }
 }
