@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -61,12 +62,12 @@ namespace SDMS_API.Data
         public int? CostOfGoodsSoldCOAId { get; set; }
         public ChartofAccount TblCostOfGoodsSoldChartOfAccount { get; set; }
 
-
         [ForeignKey(nameof(MeasureUnitID))]
         public MeasureUnit TblMeasureUnit { get; set; }
 
         [ForeignKey(nameof(CategoryId))]
         public ProductCategory TblProductCategory { get; set; }
+        public List<ProductOpeningBalanceDetail> ProductOpeningBalanceDetails { get; set; }
 
     }
 }
