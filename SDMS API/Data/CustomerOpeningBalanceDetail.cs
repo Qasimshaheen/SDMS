@@ -20,7 +20,6 @@ namespace SDMS_API.Data
         [ForeignKey(nameof(CustomerId))]
         public Customer TblCustomer { get; set; }
         [ForeignKey(nameof(CustomerOBMId))]
-        public CustomerOpeningBalanceMaster CustomerOpeningBalanceMaster { get; set; }
-       
+        public CustomerOpeningBalanceMaster TblCustomerOpeningBalanceMaster { get; set; }
     }
 }

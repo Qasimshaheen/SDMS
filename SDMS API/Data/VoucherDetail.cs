@@ -23,9 +23,9 @@ namespace SDMS_API.Data
         [ForeignKey(nameof(COAId))]
         public ChartofAccount ChartofAccount { get; set; }
         [ForeignKey(nameof(VendorId))]
-        public Vendor Vendor { get; set; }
+        public Vendor TblVendor { get; set; }
         [ForeignKey(nameof(CustomerId))]
-        public Customer Customer { get; set; }
+        public Customer TblCustomer { get; set; }
 
         [ForeignKey(nameof(VoucherMasterId))]
         public VoucherMaster TblVoucherMaster { get; set; }

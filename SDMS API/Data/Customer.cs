@@ -29,6 +29,6 @@ namespace SDMS_API.Data
         [ForeignKey(nameof(CityId))]
         public City TblCity { get; set; }
         public List<VoucherDetail> VoucherDetails { get; set; }
-        public List<CustomerOpeningBalanceDetail> CustomerOpeningBalanceDetails { get; set; }
+        public CustomerOpeningBalanceDetail TblCustomerOpeningBalanceDetail { get; set; }
     }
 }

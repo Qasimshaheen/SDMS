@@ -27,5 +27,6 @@ namespace SDMS_API.Data
         public List<VoucherDetail> VoucherDetails { get; set; }
         public List<CustomerOpeningBalanceMaster> CustomerOpeningBalanceMasters { get; set; }
         public List<VendorOpeningBalanceMaster> VendorOpeningBalanceMasters { get; set; }
+        public List<BankOpeningBalanceMaster> bankOpeningBalanceMastes { get; set; }
     }
 }
