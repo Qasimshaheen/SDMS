@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SDMS_API.Data
@@ -21,6 +22,7 @@ namespace SDMS_API.Data
         public Bank TblBank { get; set; }
         [ForeignKey(nameof(COAId))]
         public ChartofAccount TblChartofAccount { get; set; }
+        public BankOpeningBalanceDetail BankOpeningBalanceDetail { get; set; }
 
     }
 }
