@@ -69,5 +69,7 @@ namespace SDMS_API.Data
         public ProductCategory TblProductCategory { get; set; }
         public List<ProductOpeningBalanceDetail> ProductOpeningBalanceDetails { get; set; }
 
+        public List<ProductFormulaMaster> ProductFormulaMasters { get; set; }
+        public List<ProductFormulaDetail> ProductFormulaDetails { get; set; }
     }
 }
