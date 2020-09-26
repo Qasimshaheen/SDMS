@@ -71,5 +71,6 @@ namespace SDMS_API.Data
 
         public List<ProductFormulaMaster> ProductFormulaMasters { get; set; }
         public List<ProductFormulaDetail> ProductFormulaDetails { get; set; }
+        public List<ProductLedger> ProductLedgers { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SDMS_API.Data;
 
 namespace SDMS_API.Migrations
 {
     [DbContext(typeof(SDMSDbContext))]
-    partial class SDMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200926195934_AddedProductLedgerEntites")]
+    partial class AddedProductLedgerEntites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

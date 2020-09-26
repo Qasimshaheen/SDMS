@@ -14,6 +14,7 @@ namespace SDMS_API.Data
         [StringLength(80)]
         public string Address { get; set; }
         public List<Company> Companies { get; set; }
+        public List<ProductLedger> ProductLedgers { get; set; }
 
     }
 }

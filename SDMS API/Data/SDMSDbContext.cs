@@ -36,6 +36,6 @@ namespace SDMS_API.Data
         public DbSet<VoucherDetail> VoucherDetails { get; set; }
         public DbSet<ProductOpeningBalanceMaster> ProductOpeningBalanceMasters { get; set; }
         public DbSet<ProductOpeningBalanceDetail> ProductOpeningBalanceDetails { get; set; }
-     
+        public DbSet<ProductLedger> ProductLedgers { get; set; }
     }
 }
