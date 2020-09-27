@@ -22,14 +22,13 @@ namespace SDMS_API.Data
         public decimal DiscountPerc { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal NetAmount { get; set; }
-        [StringLength(80)]
+        [StringLength(100)]
         public string Remarks { get; set; }
         public bool IsPosted { get; set; }
         [ForeignKey(nameof(TblAddedByUser))]
         public int AddedBy { get; set; }
         public User TblAddedByUser { get; set; }
         public DateTime AddedOn { get; set; }
-
         [ForeignKey(nameof(TblUpdatedByUser))]
         public int? UpdatedBy { get; set; }
         public User TblUpdatedByUser { get; set; }

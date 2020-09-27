@@ -30,5 +30,7 @@ namespace SDMS_API.Data
         public City TblCity { get; set; }
         public List<VoucherDetail> VoucherDetails { get; set; }
         public CustomerOpeningBalanceDetail TblCustomerOpeningBalanceDetail { get; set; }
+        public List<SOrderMaster> SOrderMasters { get; set; }
+        public List<SalesMaster> SalesMasters { get; set; }
     }
 }

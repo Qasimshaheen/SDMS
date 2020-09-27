@@ -17,6 +17,7 @@ namespace SDMS_API.Data
         public int COAId { get; set; }
         public bool IsDebit { get; set; }
         public decimal Amount { get; set; }
+        [StringLength(100)]
         public string Remarks { get; set; }
         public int? BankId { get; set; }
 

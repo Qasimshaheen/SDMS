@@ -19,7 +19,7 @@ namespace SDMS_API.Data
         [StringLength(50)]
         public string BatchNo { get; set; }
         public int WarehouseId { get; set; }
-        [StringLength(50)]
+        [StringLength(100)]
         public string Remarks { get; set; }
         [ForeignKey(nameof(TblAddedByUser))]
         public int AddedBy { get; set; }

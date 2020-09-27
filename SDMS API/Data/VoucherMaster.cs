@@ -39,5 +39,6 @@ namespace SDMS_API.Data
         public List<VendorOpeningBalanceMaster> VendorOpeningBalanceMasters { get; set; }
         public List<BankOpeningBalanceMaster> bankOpeningBalanceMastes { get; set; }
         public List<PurchaseMaster> PurchaseMasters { get; set; }
+        public List<SalesMaster> SalesMasters { get; set; }
     }
 }

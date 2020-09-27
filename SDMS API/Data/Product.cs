@@ -13,11 +13,8 @@ namespace SDMS_API.Data
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public int MeasureUnitID { get; set; }
-
-
         [StringLength(20)]
         public string Code { get; set; }
-
         public decimal RetailPrice { get; set; }
         public decimal ActualPrice { get; set; }
 
@@ -76,5 +73,6 @@ namespace SDMS_API.Data
         public List<ManufacturingMaster> ManufacturingMasters { get; set; }
         public List<PurchaseDetail> PurchaseDetails { get; set; }
         public List<SOrderDetail> SOrderDetails { get; set; }
+        public List<SalesDetail> SalesDetails { get; set; }
     }
 }

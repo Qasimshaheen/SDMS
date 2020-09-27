@@ -17,5 +17,6 @@ namespace SDMS_API.Data
         public List<ProductLedger> ProductLedgers { get; set; }
         public List<ManufacturingMaster> ManufacturingMasters { get; set; }
         public List<ManufacturingRawDetail> ManufacturingRawDetails { get; set; }
+        public List<SalesDetail> SalesDetails { get; set; }
     }
 }
