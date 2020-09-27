@@ -68,9 +68,12 @@ namespace SDMS_API.Data
         [ForeignKey(nameof(CategoryId))]
         public ProductCategory TblProductCategory { get; set; }
         public List<ProductOpeningBalanceDetail> ProductOpeningBalanceDetails { get; set; }
-
         public List<ProductFormulaMaster> ProductFormulaMasters { get; set; }
         public List<ProductFormulaDetail> ProductFormulaDetails { get; set; }
+        public List<ManufacturingDetail> ManufacturingDetails { get; set; }
         public List<ProductLedger> ProductLedgers { get; set; }
+        public List<ManufacturingMaster> ManufacturingMasters { get; set; }
+        public List<PurchaseDetail> PurchaseDetails { get; set; }
+        
     }
 }

@@ -40,5 +40,10 @@ namespace SDMS_API.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Shift> Shifts { get; set; }
+        public DbSet<ManufacturingMaster> ManufacturingMasters { get; set; }
+        public DbSet<ManufacturingDetail> ManufacturingDetails { get; set; }
+        public DbSet<ManufacturingRawDetail> ManufacturingRawDetails { get; set; }
+        public DbSet<PurchaseMaster> PurchaseMasters { get; set; }
+        public DbSet<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

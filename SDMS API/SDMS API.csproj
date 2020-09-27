@@ -24,6 +24,12 @@
     <Compile Remove="Migrations\20200927072411_AddedAddedBy&amp;UpdatedByRelations.Designer.cs" />
     <Compile Remove="Migrations\20200927072503_AddedAddedBy&amp;UpdatedByRelations.cs" />
     <Compile Remove="Migrations\20200927072503_AddedAddedBy&amp;UpdatedByRelations.Designer.cs" />
+    <Compile Remove="Migrations\20200927174354_AddedPurchaseAndManufacturingEntites.cs" />
+    <Compile Remove="Migrations\20200927174354_AddedPurchaseAndManufacturingEntites.Designer.cs" />
+    <Compile Remove="Migrations\20200927174722_AddedPurchaseAndManufacturingEntites.cs" />
+    <Compile Remove="Migrations\20200927174722_AddedPurchaseAndManufacturingEntites.Designer.cs" />
+    <Compile Remove="Migrations\20200927174850_AddedPurchaseAndManufacturingEntites.cs" />
+    <Compile Remove="Migrations\20200927174850_AddedPurchaseAndManufacturingEntites.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

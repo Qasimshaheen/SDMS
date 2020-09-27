@@ -26,5 +26,14 @@ namespace SDMS_API.Data
         public List<ProductLedger> TblProductLedgerAddedBy { get; set; }
         [InverseProperty("TblUpdatedByUser")]
         public List<ProductLedger> TblProductLedgersUpdatedBy { get; set; }
+        [InverseProperty("TblAddedByUser")]
+        public List<ManufacturingMaster> TblManufacturingMasterAddedBy { get; set; }
+        [InverseProperty("TblUpdatedByUser")]
+        public List<ManufacturingMaster> TblManufacturingMasterUpdatedBy { get; set; }
+        [InverseProperty("TblAddedByUser")]
+        public List<PurchaseMaster> TblPurchaseMastersAddedBy { get; set; }
+        [InverseProperty("TblUpdatedByUser")]
+        public List<PurchaseMaster> TblPurchaseMastersUpdatedBy { get; set; }
+
     }
 }
