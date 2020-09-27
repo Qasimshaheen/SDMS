@@ -29,6 +29,8 @@ namespace SDMS_API.Data
         public int? UpdatedBy { get; set; }
         public User TblUpdatedByUser { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        [StringLength(50)]
+        public string SerialNo { get; set; }
         [ForeignKey(nameof(WarehouseId))]
         public Warehouse TblWarehouse { get; set; }
         [ForeignKey(nameof(ProductId))]
