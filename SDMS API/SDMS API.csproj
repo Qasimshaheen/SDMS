@@ -30,6 +30,8 @@
     <Compile Remove="Migrations\20200927174722_AddedPurchaseAndManufacturingEntites.Designer.cs" />
     <Compile Remove="Migrations\20200927174850_AddedPurchaseAndManufacturingEntites.cs" />
     <Compile Remove="Migrations\20200927174850_AddedPurchaseAndManufacturingEntites.Designer.cs" />
+    <Compile Remove="Migrations\20200927181218_AddedSalesOrderEntites.cs" />
+    <Compile Remove="Migrations\20200927181218_AddedSalesOrderEntites.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

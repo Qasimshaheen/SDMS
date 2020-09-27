@@ -45,5 +45,7 @@ namespace SDMS_API.Data
         public DbSet<ManufacturingRawDetail> ManufacturingRawDetails { get; set; }
         public DbSet<PurchaseMaster> PurchaseMasters { get; set; }
         public DbSet<PurchaseDetail> PurchaseDetails { get; set; }
+        public DbSet<SOrderMaster> SOrderMasters { get; set; }
+        public DbSet<SOrderDetail> SOrderDetails { get; set; }
     }
 }

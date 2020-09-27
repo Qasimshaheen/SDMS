@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SDMS_API.Data
@@ -74,6 +75,6 @@ namespace SDMS_API.Data
         public List<ProductLedger> ProductLedgers { get; set; }
         public List<ManufacturingMaster> ManufacturingMasters { get; set; }
         public List<PurchaseDetail> PurchaseDetails { get; set; }
-        
+        public List<SOrderDetail> SOrderDetails { get; set; }
     }
 }
