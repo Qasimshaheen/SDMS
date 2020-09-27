@@ -19,6 +19,9 @@ namespace SDMS_API.Data
         public decimal DiscountPerc { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal NetAmount { get; set; }
+        public bool IsPosted { get; set; }
+        [StringLength(50)]
+        public string Remarks { get; set; }
         [ForeignKey(nameof(CustomerId))]
         public Customer TblCustomer { get; set; }
         public List<SOrderDetail> SOrderDetails { get; set; }
