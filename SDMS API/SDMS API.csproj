@@ -20,6 +20,10 @@
     <Compile Remove="Migrations\20200927070204_AddedEmployeeRelatedEntites.Designer.cs" />
     <Compile Remove="Migrations\20200927070301_AddedEmployeeRelatedEntites.cs" />
     <Compile Remove="Migrations\20200927070301_AddedEmployeeRelatedEntites.Designer.cs" />
+    <Compile Remove="Migrations\20200927072411_AddedAddedBy&amp;UpdatedByRelations.cs" />
+    <Compile Remove="Migrations\20200927072411_AddedAddedBy&amp;UpdatedByRelations.Designer.cs" />
+    <Compile Remove="Migrations\20200927072503_AddedAddedBy&amp;UpdatedByRelations.cs" />
+    <Compile Remove="Migrations\20200927072503_AddedAddedBy&amp;UpdatedByRelations.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

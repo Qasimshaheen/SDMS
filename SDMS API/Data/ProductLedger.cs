@@ -21,6 +21,14 @@ namespace SDMS_API.Data
         public int WarehouseId { get; set; }
         [StringLength(50)]
         public string Remarks { get; set; }
+        [ForeignKey(nameof(TblAddedByUser))]
+        public int AddedBy { get; set; }
+        public User TblAddedByUser { get; set; }
+        public DateTime AddedOn { get; set; }
+        [ForeignKey(nameof(TblUpdatedByUser))]
+        public int? UpdatedBy { get; set; }
+        public User TblUpdatedByUser { get; set; }
+        public DateTime? UpdatedOn { get; set; }
         [ForeignKey(nameof(WarehouseId))]
         public Warehouse TblWarehouse { get; set; }
         [ForeignKey(nameof(ProductId))]
