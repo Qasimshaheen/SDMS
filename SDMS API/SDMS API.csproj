@@ -14,6 +14,12 @@
     <Compile Remove="Migrations\20200925184935_AddedBankOpeningsAndUpdatedCustomerAndVendorOpenings.Designer.cs" />
     <Compile Remove="Migrations\20200925185258_AddedBankOpeningsAndUpdatedCustomerAndVendorOpenings.cs" />
     <Compile Remove="Migrations\20200925185258_AddedBankOpeningsAndUpdatedCustomerAndVendorOpenings.Designer.cs" />
+    <Compile Remove="Migrations\20200927070006_AddedEmployeeRelatedEntites.cs" />
+    <Compile Remove="Migrations\20200927070006_AddedEmployeeRelatedEntites.Designer.cs" />
+    <Compile Remove="Migrations\20200927070204_AddedEmployeeRelatedEntites.cs" />
+    <Compile Remove="Migrations\20200927070204_AddedEmployeeRelatedEntites.Designer.cs" />
+    <Compile Remove="Migrations\20200927070301_AddedEmployeeRelatedEntites.cs" />
+    <Compile Remove="Migrations\20200927070301_AddedEmployeeRelatedEntites.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

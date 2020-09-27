@@ -37,5 +37,8 @@ namespace SDMS_API.Data
         public DbSet<ProductOpeningBalanceMaster> ProductOpeningBalanceMasters { get; set; }
         public DbSet<ProductOpeningBalanceDetail> ProductOpeningBalanceDetails { get; set; }
         public DbSet<ProductLedger> ProductLedgers { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
     }
 }
