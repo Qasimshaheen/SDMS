@@ -25,27 +25,27 @@ namespace SDMS_API.Controllers
         [HttpGet]
         public async Task<IEnumerable<ChartOfAccountListingVM>> GetChartOfAccounts()
         {
-            var results = await _dbContext.ChartofAccounts.Select(x => new ChartOfAccountListingVM 
-            { 
-                Id=x.Id,
-                Name=x.Name,
-                AccountCode=x.Code,
-                Category=x.Category
+            var results = await _dbContext.ChartofAccounts.Select(x => new ChartOfAccountListingVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+                AccountCode = x.Code,
+                Category = x.Category
             }).ToListAsync();
             return results;
         }
         [HttpGet]
         public async Task<ChartOfAccountDetailVM> GetChartOfAccountById(int chartOfAccountId)
         {
-            var result = await _dbContext.ChartofAccounts.Where(x=>x.Id==chartOfAccountId).Select(x => new ChartOfAccountDetailVM
+            var result = await _dbContext.ChartofAccounts.Where(x => x.Id == chartOfAccountId).Select(x => new ChartOfAccountDetailVM
             {
                 Id = x.Id,
                 Name = x.Name,
                 AccountCode = x.Code,
                 Category = x.Category,
-                IsDetailAccount=x.IsDetailAccount,
-                Status=x.IsActive ? "Active" : "Inctive",
-                ParentAccount=x.TblParentChartOfAccount !=null ? x.TblParentChartOfAccount.Name : ""
+                IsDetailAccount = x.IsDetailAccount,
+                Status = x.IsActive ? "Active" : "Inctive",
+                ParentAccount = x.TblParentChartOfAccount != null ? x.TblParentChartOfAccount.Name : ""
             }).FirstOrDefaultAsync();
             return result;
         }
@@ -79,6 +79,30 @@ namespace SDMS_API.Controllers
                 await _dbContext.ChartofAccounts.AddAsync(chartOfAccount);
                 await _dbContext.SaveChangesAsync();
                 return chartOfAccount.Id;
+            }
+            else
+                return -1;
+        }
+        [HttpPut]
+        public async Task<int> EditChartOfAccount(ChartOfAccountEditVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _dbContext.ChartofAccounts.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                if (result != null)
+                {
+                    result.Name = model.Name;
+                    result.Code = model.AccountCode;
+                    result.Category = model.Category;
+                    result.IsDebit = model.IsDebit;
+                    result.IsDetailAccount = model.IsDetailAccount;
+                    result.ParentAccountId = model.ParentAccountId;
+                    result.IsActive = model.IsActive;
+                    await _dbContext.SaveChangesAsync();
+                    return result.Id;
+                }
+                else
+                    return -1;
             }
             else
                 return -1;
