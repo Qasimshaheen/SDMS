@@ -69,5 +69,18 @@ namespace SDMS_API.Controllers
             else
                 return -1;
         }
+        [HttpPut]
+        public async Task<int> EditProductCategory(ProductCategoryEditVM model)
+        {
+            var result = await _dbContext.ProductCategories.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+            if (result != null)
+            {
+                result.Name = model.Name;
+                await _dbContext.SaveChangesAsync();
+                return result.Id;
+            }
+            else
+                return -1;
+        }
     }
 }
