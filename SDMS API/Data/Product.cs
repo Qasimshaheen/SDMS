@@ -15,6 +15,8 @@ namespace SDMS_API.Data
         public int MeasureUnitID { get; set; }
         [StringLength(20)]
         public string Code { get; set; }
+        [StringLength(50)]
+        public string Name { get; set; }
         public decimal RetailPrice { get; set; }
         public decimal ActualPrice { get; set; }
 
