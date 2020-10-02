@@ -52,5 +52,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.6.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\Warehouse\" />
+  </ItemGroup>
+
 
 </Project>
