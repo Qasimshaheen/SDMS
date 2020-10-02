@@ -36,6 +36,8 @@
     <Compile Remove="Migrations\20200927190745_AddedSalesRelatedEntites.Designer.cs" />
     <Compile Remove="Migrations\20200927191622_AddedSalesRelatedEntites.cs" />
     <Compile Remove="Migrations\20200927191622_AddedSalesRelatedEntites.Designer.cs" />
+    <Compile Remove="Migrations\20201001174554_AddedProductNameColumnOrder.cs" />
+    <Compile Remove="Migrations\20201001174554_AddedProductNameColumnOrder.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
