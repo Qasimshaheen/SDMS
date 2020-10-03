@@ -67,10 +67,14 @@ namespace SDMS_API.Controllers
         {
             if (ModelState.IsValid)
             {
+                string lastProductCode = string.Empty;
+                var LastProduct = _dbContext.Products.AsNoTracking().OrderByDescending(x => x.Id).FirstOrDefault();
+                if (LastProduct != null)
+                    lastProductCode = LastProduct.Code;
                 var product = new Product()
                 {
-                    //Code = SDMSExtensions.GenerateNextCode("", "PC"),
-                    Code = model.Code,
+                    
+                    Code = lastProductCode.GenerateNextCode("PC"),
                     Name = model.Name,
                     CreatedDate = model.Date,
                     CategoryId = model.ProductCategoryId,
