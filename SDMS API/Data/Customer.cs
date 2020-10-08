@@ -15,7 +15,7 @@ namespace SDMS_API.Data
         public int CityId { get; set; }
         [StringLength(20)]
         public string Code { get; set; }
-        [StringLength(50)]
+        [StringLength(50),Required]
         public string Name { get; set; }
         [StringLength(13)]
         public string ContactNumber { get; set; }
