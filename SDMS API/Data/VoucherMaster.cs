@@ -22,7 +22,6 @@ namespace SDMS_API.Data
         public bool IsPosted { get; set; }
         public DateTime? ChequeDate { get; set; }
         public string ChequeNo { get; set; }
-        public int BankId { get; set; }
         [ForeignKey(nameof(TblAddedByUser))]
         public int AddedBy { get; set; }
         public User TblAddedByUser { get; set; }
@@ -31,9 +30,6 @@ namespace SDMS_API.Data
         public int? UpdatedBy { get; set; }
         public User TblUpdatedByUser { get; set; }
         public DateTime? UpdatedOn { get; set; }
-
-        [ForeignKey(nameof(BankId))]
-        public Bank TblBank { get; set; }
         public List<VoucherDetail> VoucherDetails { get; set; }
         public List<CustomerOpeningBalanceMaster> CustomerOpeningBalanceMasters { get; set; }
         public List<VendorOpeningBalanceMaster> VendorOpeningBalanceMasters { get; set; }

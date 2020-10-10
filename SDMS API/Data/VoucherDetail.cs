@@ -19,8 +19,6 @@ namespace SDMS_API.Data
         public decimal Amount { get; set; }
         [StringLength(100)]
         public string Remarks { get; set; }
-        public int? BankId { get; set; }
-
         [ForeignKey(nameof(COAId))]
         public ChartofAccount ChartofAccount { get; set; }
         [ForeignKey(nameof(VendorId))]
