@@ -11,14 +11,16 @@ namespace SDMS_API.Data
     public class VoucherMaster
     {
         public int Id { get; set; }
+        [StringLength(20),Required]
         public string VoucherNumber { get; set; }
         public DateTime Date { get; set; }
-        [StringLength(2)]
+        [StringLength(2),Required]
         public string VoucherType { get; set; }
         [StringLength(50)]
         public string Narration { get; set; }
         public decimal? TotalDebit { get; set; }
         public decimal? TotalCredit { get; set; }
+        [Required]
         public bool IsPosted { get; set; }
         public DateTime? ChequeDate { get; set; }
         public string ChequeNo { get; set; }

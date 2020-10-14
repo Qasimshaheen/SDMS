@@ -11,11 +11,13 @@ namespace SDMS_API.Data
     {
         public int Id { get; set; }
         public int VoucherMasterId { get; set; }
-        [StringLength(20)]
         public int? CustomerId { get; set; }
         public int? VendorId { get; set; }
+        [Required]
         public int COAId { get; set; }
+        [Required] 
         public bool IsDebit { get; set; }
+        [Required]
         public decimal Amount { get; set; }
         [StringLength(100)]
         public string Remarks { get; set; }
