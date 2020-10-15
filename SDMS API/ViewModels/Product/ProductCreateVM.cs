@@ -13,7 +13,6 @@ namespace SDMS_API.ViewModels.Product
         [StringLength(50),Required]
         public string Name { get; set; }
         public DateTime Date { get; set; }
-        public string Code { get; set; }
         public decimal RetailPrice { get; set; }
         public decimal ActualPrice { get; set; }
         [StringLength(100)]

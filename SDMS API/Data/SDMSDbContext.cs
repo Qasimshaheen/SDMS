@@ -49,5 +49,7 @@ namespace SDMS_API.Data
         public DbSet<SOrderDetail> SOrderDetails { get; set; }
         public DbSet<SalesMaster> SalesMasters { get; set; }
         public DbSet<SalesDetail> SalesDetails { get; set; }
+        public DbSet<ProductFormulaMaster> ProductFormulaMasters { get; set; }
+        public DbSet<ProductFormulaDetail> ProductFormulaDetails { get; set; }
     }
 }
