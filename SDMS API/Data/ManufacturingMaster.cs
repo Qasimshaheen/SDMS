@@ -12,6 +12,8 @@ namespace SDMS_API.Data
         public int Id { get; set; }
         public int FormulaMasterId { get; set; }
         public int? ProductId { get; set; }
+        [StringLength(20),Required]
+        public string Code { get; set; }
         public DateTime Date { get; set; }
         [StringLength(50)]
         public string BatchNo { get; set; }
