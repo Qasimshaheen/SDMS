@@ -89,12 +89,13 @@ namespace SDMS_API.Controllers
         [HttpPost]
         public async Task<int> CreateVoucherMaster(VoucherMasterCreateVM model)
         {
-            string lastVoucherNumber = string.Empty;
-            var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().OrderByDescending(x => x.Id).FirstOrDefault();
-            if (LastVoucherNumber != null)
-                lastVoucherNumber = LastVoucherNumber.VoucherNumber;
             if (ModelState.IsValid)
             {
+                string lastVoucherNumber = string.Empty;
+                var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().OrderByDescending(x => x.Id).FirstOrDefault();
+                if (LastVoucherNumber != null)
+                    lastVoucherNumber = LastVoucherNumber.VoucherNumber;
+
                 var voucherMaster = new VoucherMaster()
                 {
                     Date = model.Date,
