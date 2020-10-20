@@ -38,7 +38,7 @@ namespace SDMS_API.Data
         [ForeignKey(nameof(WarehouseId))]
         public Warehouse TblWarehouse { get; set; }
         [ForeignKey(nameof(VendorId))]
-        public Vendor Vendor { get; set; }
+        public Vendor TblVendor { get; set; }
         public List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

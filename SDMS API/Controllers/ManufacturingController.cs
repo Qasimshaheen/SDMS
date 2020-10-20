@@ -24,7 +24,7 @@ namespace SDMS_API.Controllers
             this._dbContext = sDMSDbContext;
         }
         [HttpGet]
-        public async Task<IEnumerable<ManufacturingListingVM>> ManufacturingListings()
+        public async Task<IEnumerable<ManufacturingListingVM>> GetManufacturings()
         {
             var results = await _dbContext.ManufacturingMasters.Select(x => new ManufacturingListingVM
             {
