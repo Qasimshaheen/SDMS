@@ -15,9 +15,7 @@ namespace SDMS_API.ViewModels.ManufacturingMaster
         public string BatchNo { get; set; }
         public string WarehouseName { get; set; }
         public decimal Quantity { get; set; }
-        public string Status { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public string PostStatus { get; set; }
         public IEnumerable<ManufacturingDetailDetailVM> ManufacturingDetails { get; set; }
     }
 }

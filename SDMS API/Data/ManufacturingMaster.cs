@@ -31,9 +31,9 @@ namespace SDMS_API.Data
         public DateTime? UpdatedOn { get; set; }
 
         [ForeignKey(nameof(WarehouseId))]
-        public Warehouse Warehouse { get; set; }
+        public Warehouse TblWarehouse { get; set; }
         [ForeignKey(nameof(ProductId))]
-        public Product Product { get; set; }
+        public Product TblProduct { get; set; }
 
         [ForeignKey(nameof(FormulaMasterId))]
         public ProductFormulaMaster TblProductFormulaMaster { get; set; }

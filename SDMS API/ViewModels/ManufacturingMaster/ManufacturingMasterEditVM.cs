@@ -9,6 +9,7 @@ namespace SDMS_API.ViewModels.ManufacturingMaster
 {
     public class ManufacturingMasterEditVM
     {
+        public int Id { get; set; }
         [Required]
         public int FormulaMasterId { get; set; }
         [Required]

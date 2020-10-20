@@ -8,7 +8,6 @@ namespace SDMS_API.ViewModels.ManufacturingRawDetail
 {
     public class ManufacturingRawDetailEditVM
     {
-        public int Id { get; set; }
         [Required]
         public int WarehouseId { get; set; }
         [StringLength(50), Required]
