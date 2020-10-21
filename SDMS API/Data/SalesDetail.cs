@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SDMS_API.Data
 {
@@ -6,7 +7,11 @@ namespace SDMS_API.Data
     {
         public int Id { get; set; }
         public int SalesMasterId { get; set; }
+        [Required]
         public int ProductId { get; set; }
+        [Required]
+        public string BatchNo { get; set; }
+        [Required]
         public int WarehouseId { get; set; }
         public decimal Quantity { get; set; }
         public decimal Price { get; set; }
