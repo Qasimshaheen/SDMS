@@ -127,7 +127,7 @@ namespace SDMS_API.Controllers
                 return -1;
         }
         [HttpPut]
-        public async Task<int> EditVoucherMasterById(VoucherMasterEditVM model)
+        public async Task<bool> EditVoucherMasterById(VoucherMasterEditVM model)
         {
             if (ModelState.IsValid)
             {
@@ -158,14 +158,14 @@ namespace SDMS_API.Controllers
                         Remarks = x.Remarks
                     }).ToList();
                     await _dbContext.VoucherDetails.AddRangeAsync(voucherDetails);
-                    await _dbContext.SaveChangesAsync();
-                    return result.Id;
+                   var count= await _dbContext.SaveChangesAsync();
+                    return count > 0;
                 }
                 else
-                    return -1;
+                    return false;
             }
             else
-                return -1;
+                return false;
         }
     }
 }
