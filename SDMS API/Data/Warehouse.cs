@@ -18,5 +18,6 @@ namespace SDMS_API.Data
         public List<ManufacturingMaster> ManufacturingMasters { get; set; }
         public List<ManufacturingRawDetail> ManufacturingRawDetails { get; set; }
         public List<SalesDetail> SalesDetails { get; set; }
+        public List<ProductOpeningBalanceDetail> ProductOpeningBalanceDetails { get; set; }
     }
 }
