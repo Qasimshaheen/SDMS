@@ -9,7 +9,7 @@ namespace SDMS_API.Data
     public class ProductOpeningBalanceMaster
     {
         public int Id { get; set; }
-        public int VoucherMasterId{ get; set; }
+        public int? VoucherMasterId{ get; set; }
         public DateTime Date { get; set; }
         public bool IsPosted { get; set; }
         [ForeignKey(nameof(VoucherMasterId))]
