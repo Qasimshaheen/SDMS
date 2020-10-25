@@ -11,7 +11,6 @@ namespace SDMS_API.Data
     {
         public int Id { get; set; }
         public int CustomerOBMId { get; set; }
-        [StringLength(20)]
         public int CustomerId { get; set; }
         public decimal OpeningBalance { get; set; }
         public decimal OpeningReceipt { get; set; }

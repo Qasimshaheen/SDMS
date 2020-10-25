@@ -11,7 +11,7 @@ namespace SDMS_API.Data
     public class CustomerOpeningBalanceMaster
     {
         public int Id { get; set; }
-        public int VoucherMasterId { get; set; }
+        public int? VoucherMasterId { get; set; }
         public DateTime Date { get; set; }
         [ForeignKey(nameof(VoucherMasterId))]
         public VoucherMaster TblVoucherMaster { get; set; }
