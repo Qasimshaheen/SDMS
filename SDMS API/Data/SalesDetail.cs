@@ -20,7 +20,7 @@ namespace SDMS_API.Data
         public decimal DiscountAmount { get; set; }
         public decimal NetAmount { get; set; }
         [ForeignKey(nameof(WarehouseId))]
-        public Warehouse Warehouse { get; set; }
+        public Warehouse TblWarehouse { get; set; }
         [ForeignKey(nameof(ProductId))]
         public Product TblProduct { get; set; }
         [ForeignKey(nameof(SalesMasterId))]

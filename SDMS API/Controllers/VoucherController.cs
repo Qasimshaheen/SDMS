@@ -158,7 +158,7 @@ namespace SDMS_API.Controllers
                         Remarks = x.Remarks
                     }).ToList();
                     await _dbContext.VoucherDetails.AddRangeAsync(voucherDetails);
-                   var count= await _dbContext.SaveChangesAsync();
+                    var count = await _dbContext.SaveChangesAsync();
                     return count > 0;
                 }
                 else
