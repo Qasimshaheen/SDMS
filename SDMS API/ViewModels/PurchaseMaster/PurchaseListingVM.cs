@@ -15,6 +15,7 @@ namespace SDMS_API.ViewModels.PurchaseMaster
         public string BatchNo { get; set; }
         public string Remarks { get; set; }
         public string PostStatus { get; set; }
+        public string VoucherNumber { get; set; }
         public IEnumerable<PurchaseDetailListingVM> PurchaseDetails { get; set; }
     }
 }

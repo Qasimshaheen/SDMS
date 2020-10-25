@@ -11,6 +11,7 @@ namespace SDMS_API.ViewModels.PurchaseMaster
         public int Id { get; set; }
         public string VendorName { get; set; }
         public string WarehouseName { get; set; }
+        public string VoucherNumber { get; set; }
         public DateTime Date { get; set; }
         public string BatchNo { get; set; }
         public decimal TotalAmount { get; set; }

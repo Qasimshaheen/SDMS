@@ -35,6 +35,7 @@ namespace SDMS_API.Controllers
                 WarehouseName = x.TblWarehouse.Name,
                 Remarks = x.Remarks,
                 PostStatus = x.IsPosted ? "Posted" : "UnPost",
+                VoucherNumber=x.TblVoucherMaster !=null ? x.TblVoucherMaster.VoucherNumber : "",
                 PurchaseDetails = x.PurchaseDetails.Select(y => new PurchaseDetailListingVM
                 {
                     Id = y.Id,
@@ -63,6 +64,7 @@ namespace SDMS_API.Controllers
                 DiscountPerc = x.DiscountPerc,
                 NetAmount = x.NetAmount,
                 Remarks = x.Remarks,
+                VoucherNumber=x.TblVoucherMaster !=null ? x.TblVoucherMaster.VoucherNumber: "",
                 PostStatus = x.IsPosted ? "Posted" : "UnPost",
                 PurchaseDetails = x.PurchaseDetails.Select(y => new PurchaseDetailDetailVM
                 {
