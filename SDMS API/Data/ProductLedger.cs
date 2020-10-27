@@ -14,7 +14,7 @@ namespace SDMS_API.Data
         public DateTime Date { get; set; }
         [StringLength(20)]
         public string TransNo { get; set; }
-        public bool IsInOut { get; set; }
+        public bool IsOut { get; set; }
         public decimal Quantity { get; set; }
         [StringLength(50)]
         public string BatchNo { get; set; }
