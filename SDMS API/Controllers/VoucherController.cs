@@ -92,7 +92,7 @@ namespace SDMS_API.Controllers
             if (ModelState.IsValid)
             {
                 string lastVoucherNumber = string.Empty;
-                var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().OrderByDescending(x => x.Id).FirstOrDefault();
+                var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().Where(x => x.VoucherNumber.Substring(0,2) == model.VoucherNumberType).OrderByDescending(x => x.Id).FirstOrDefault();
                 if (LastVoucherNumber != null)
                     lastVoucherNumber = LastVoucherNumber.VoucherNumber;
 

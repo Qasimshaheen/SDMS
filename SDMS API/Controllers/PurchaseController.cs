@@ -228,7 +228,7 @@ namespace SDMS_API.Controllers
 
             // Voucher Number Generation
             string lastVoucherNumber = string.Empty;
-            var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().Where(x => x.VoucherType == "JV").OrderByDescending(x => x.Id).FirstOrDefault();
+            var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().Where(x => x.VoucherNumber.Substring(0, 2) == "JV").OrderByDescending(x => x.Id).FirstOrDefault();
             if (LastVoucherNumber != null)
                 lastVoucherNumber = LastVoucherNumber.VoucherNumber;
 

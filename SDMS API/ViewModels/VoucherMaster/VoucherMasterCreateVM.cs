@@ -10,6 +10,7 @@ namespace SDMS_API.ViewModels.VoucherMaster
     public class VoucherMasterCreateVM
     {
         public DateTime Date { get; set; }
+        public string VoucherNumberType { get; set; }
         [StringLength(2),Required]
         public string VoucherType { get; set; }
         [StringLength(50)]
