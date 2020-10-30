@@ -238,7 +238,7 @@ namespace SDMS_API.Controllers
                 VoucherNumber = lastVoucherNumber.GenerateNextCode("JV"),
                 VoucherType = "PI",
                 Narration = purchaseItem.purchaseMaster.Remarks,
-                IsPosted = false,
+                IsPosted = true,
                 AddedBy = purchaseItem.purchaseMaster.AddedBy,
                 AddedOn = DateTime.Now,
             };
