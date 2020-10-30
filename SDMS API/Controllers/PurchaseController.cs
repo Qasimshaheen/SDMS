@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using SDMS_API.Data;
 using SDMS_API.ExtensionMethods;
 using SDMS_API.ViewModels.PurchaseDetail;
 using SDMS_API.ViewModels.PurchaseMaster;
+using SDMS_API.ViewModels.VoucherMaster;
 
 namespace SDMS_API.Controllers
 {
@@ -35,7 +37,7 @@ namespace SDMS_API.Controllers
                 WarehouseName = x.TblWarehouse.Name,
                 Remarks = x.Remarks,
                 PostStatus = x.IsPosted ? "Posted" : "UnPost",
-                VoucherNumber=x.TblVoucherMaster !=null ? x.TblVoucherMaster.VoucherNumber : "",
+                VoucherNumber = x.TblVoucherMaster != null ? x.TblVoucherMaster.VoucherNumber : "",
                 PurchaseDetails = x.PurchaseDetails.Select(y => new PurchaseDetailListingVM
                 {
                     Id = y.Id,
@@ -56,6 +58,7 @@ namespace SDMS_API.Controllers
             {
                 Id = x.Id,
                 Date = x.Date,
+                Code = x.Code,
                 VendorName = x.TblVendor.Name,
                 BatchNo = x.BatchNo,
                 WarehouseName = x.TblWarehouse.Name,
@@ -64,7 +67,7 @@ namespace SDMS_API.Controllers
                 DiscountPerc = x.DiscountPerc,
                 NetAmount = x.NetAmount,
                 Remarks = x.Remarks,
-                VoucherNumber=x.TblVoucherMaster !=null ? x.TblVoucherMaster.VoucherNumber: "",
+                VoucherNumber = x.TblVoucherMaster != null ? x.TblVoucherMaster.VoucherNumber : "",
                 PostStatus = x.IsPosted ? "Posted" : "UnPost",
                 PurchaseDetails = x.PurchaseDetails.Select(y => new PurchaseDetailDetailVM
                 {
@@ -176,6 +179,105 @@ namespace SDMS_API.Controllers
             }
             else
                 return false;
+        }
+
+
+        /// <summary>
+        /// 1. Create new Product Ledgers
+        /// 2. Create new Voucher with Voucher Details
+        /// 3. In Voucher Details we have 
+        ///    1. Debit entry
+        ///    2. Credit entry
+        /// 4. Update the PurchaseMaster with VoucherMasterId and IsPosted
+        /// </summary>
+        /// <param name="purchaseMasterId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<bool> PostPurchase(int purchaseMasterId)
+        {
+            var purchaseItem = _dbContext.PurchaseMasters.Where(x => x.Id == purchaseMasterId).Select(x => new
+            {
+                purchaseMaster = x,
+                Details = x.PurchaseDetails,
+                Inventories = x.PurchaseDetails.Select(y => new
+                {
+                    y.TblProduct.InventoryCOAId,
+                    y.ProductId,
+                    y.TotalAmount
+                }),
+                vendorCOAId = x.TblVendor.COAId
+            }).FirstOrDefault();
+
+            foreach (var masterDetailItem in purchaseItem.Details)
+            {
+                var productLedger = new ProductLedger()
+                {
+                    Date = purchaseItem.purchaseMaster.Date,
+                    ProductId = masterDetailItem.ProductId,
+                    TransNo = purchaseItem.purchaseMaster.Code,
+                    Quantity = masterDetailItem.Quantity,
+                    WarehouseId = purchaseItem.purchaseMaster.WarehouseId,
+                    BatchNo = purchaseItem.purchaseMaster.BatchNo,
+                    IsOut = false,
+                    AddedBy = purchaseItem.purchaseMaster.AddedBy,
+                    AddedOn = DateTime.Now,
+                    Remarks = "Purchase"
+                };
+                await _dbContext.ProductLedgers.AddAsync(productLedger);
+            }
+
+            // Voucher Number Generation
+            string lastVoucherNumber = string.Empty;
+            var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().Where(x => x.VoucherType == "JV").OrderByDescending(x => x.Id).FirstOrDefault();
+            if (LastVoucherNumber != null)
+                lastVoucherNumber = LastVoucherNumber.VoucherNumber;
+
+            var voucherMaster = new VoucherMaster
+            {
+                Date = purchaseItem.purchaseMaster.Date,
+                VoucherNumber = lastVoucherNumber.GenerateNextCode("JV"),
+                VoucherType = "PI",
+                Narration = purchaseItem.purchaseMaster.Remarks,
+                IsPosted = false,
+                AddedBy = purchaseItem.purchaseMaster.AddedBy,
+                AddedOn = DateTime.Now,
+            };
+
+            //Debit in Voucher Details
+            voucherMaster.VoucherDetails = purchaseItem.Inventories.GroupBy(x => x.InventoryCOAId).Select(x => new VoucherDetail
+            {
+                Amount = x.Sum(y => y.TotalAmount),
+                COAId = x.Key.HasValue ? x.Key.Value : 1,
+                IsDebit = true,
+                VendorId = null,
+                CustomerId = null,
+                Remarks = null,
+            }).ToList();
+
+            //Credit in Voucher Details
+            voucherMaster.VoucherDetails.Add(new VoucherDetail()
+            {
+                IsDebit = false,
+                CustomerId = null,
+                VendorId = purchaseItem.purchaseMaster.VendorId,
+                COAId = purchaseItem.vendorCOAId,
+                Amount = voucherMaster.VoucherDetails.Sum(y => y.Amount),
+                Remarks = null
+            });
+
+            voucherMaster.TotalDebit = voucherMaster.VoucherDetails.Where(x => x.IsDebit).Sum(x => x.Amount);
+            voucherMaster.TotalCredit = voucherMaster.VoucherDetails.Where(x => x.IsDebit == false).Sum(x => x.Amount);
+
+            await _dbContext.VoucherMasters.AddAsync(voucherMaster);
+
+            var count = await _dbContext.SaveChangesAsync();
+
+            purchaseItem.purchaseMaster.VoucherMasterId = voucherMaster.Id;
+            purchaseItem.purchaseMaster.IsPosted = true;
+
+            count = await _dbContext.SaveChangesAsync();
+
+            return count > 0;
         }
     }
 }

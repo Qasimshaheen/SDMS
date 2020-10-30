@@ -9,6 +9,7 @@ namespace SDMS_API.ViewModels.PurchaseMaster
     public class PurchaseMasterDetailVM
     {
         public int Id { get; set; }
+        public string Code { get; set; }
         public string VendorName { get; set; }
         public string WarehouseName { get; set; }
         public string VoucherNumber { get; set; }
