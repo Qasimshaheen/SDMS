@@ -12,7 +12,6 @@ namespace SDMS_API.ViewModels.SOrderMaster
         public int CustomerId { get; set; }
         public DateTime Date { get; set; }
         public DateTime DueDate { get; set; }
-        public decimal TotalAmount { get; set; }
         public decimal DiscountPerc { get; set; }
         public decimal DiscountAmount { get; set; }
         public bool IsPosted { get; set; }
