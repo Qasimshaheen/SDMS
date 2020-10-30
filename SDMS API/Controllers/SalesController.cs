@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +63,7 @@ namespace SDMS_API.Controllers
                 Date = x.Date,
                 SINo = x.Code,
                 CustomerName = x.TblCustomer.Name,
+                VoucherNumber = x.TblVoucherMaster != null ? x.TblVoucherMaster.VoucherNumber : "",
                 SOrderNo = x.TblSOrderMaster.Code,
                 TotalAmount = x.TotalAmount,
                 DiscountAmount = x.DiscountAmount,
@@ -112,10 +115,10 @@ namespace SDMS_API.Controllers
                     Code = lastSINo.GenerateNextCode("SI"),
                     CustomerId = model.CustomerId,
                     SOrderId = model.SOrderId,
-                    TotalAmount = model.TotalAmount,
+                    TotalAmount = model.SalesDetails.Sum(x => x.TotalAmount),
                     DiscountPerc = model.DiscountPerc,
                     DiscountAmount = model.DiscountAmount,
-                    NetAmount = model.TotalAmount - model.DiscountAmount,
+                    NetAmount = model.SalesDetails.Sum(x => x.TotalAmount) - model.DiscountAmount,
                     IsPosted = model.IsPosted,
                     Remarks = model.Remarks,
                     AddedBy = model.AddedBy,
@@ -140,7 +143,7 @@ namespace SDMS_API.Controllers
             else
                 return -1;
         }
-        [HttpPost]
+        [HttpPut]
         public async Task<bool> EditSalesById(SalesMasterEditVM model)
         {
             if (ModelState.IsValid)
@@ -184,6 +187,92 @@ namespace SDMS_API.Controllers
             }
             else
                 return false;
+        }
+        [HttpPost]
+        public async Task<bool> PostSales(int salesMasterId)
+        {
+            var salesItem = _dbContext.SalesMasters.Where(x => x.Id == salesMasterId).Select(x => new
+            {
+                salesMaster = x,
+                salesDetail = x.SalesDetails,
+                inventories = x.SalesDetails.Select(y => new
+                {
+                    y.TblProduct.SaleCOAId,
+                    y.ProductId,
+                    y.TotalAmount
+                }),
+                customerCOAId = x.TblCustomer.COAId
+            }).FirstOrDefault();
+
+            // Add Records in ProductLedger
+            foreach (var masterDetailItem in salesItem.salesDetail)
+            {
+                var productLedger = new ProductLedger()
+                {
+                    Date = salesItem.salesMaster.Date,
+                    ProductId = masterDetailItem.ProductId,
+                    TransNo = salesItem.salesMaster.Code,
+                    Quantity = masterDetailItem.Quantity,
+                    BatchNo = masterDetailItem.BatchNo,
+                    WarehouseId = masterDetailItem.WarehouseId,
+                    IsOut = true,
+                    AddedBy = salesItem.salesMaster.AddedBy,
+                    AddedOn = DateTime.Now,
+                    Remarks = "Sales"
+                };
+                await _dbContext.ProductLedgers.AddAsync(productLedger);
+            }
+
+            // Voucher Number Generation
+            string lastVoucherNumber = string.Empty;
+            var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking()/*.Where(x => x.VoucherType == "JV")*/.OrderByDescending(x => x.Id).FirstOrDefault();
+            if (LastVoucherNumber != null)
+                lastVoucherNumber = LastVoucherNumber.VoucherNumber;
+
+            // Voucher Master Entry
+            var voucherMaster = new VoucherMaster()
+            {
+                Date = salesItem.salesMaster.Date,
+                VoucherNumber = lastVoucherNumber.GenerateNextCode("JV"),
+                VoucherType = "SI",
+                Narration = salesItem.salesMaster.Remarks,
+                IsPosted = true,
+                AddedBy = salesItem.salesMaster.AddedBy,
+                AddedOn = DateTime.Now
+            };
+
+            // Credit In VoucherDetail
+            voucherMaster.VoucherDetails = salesItem.inventories.GroupBy(x => x.SaleCOAId).Select(x => new VoucherDetail
+            {
+                Amount = x.Sum(y => y.TotalAmount),
+                CustomerId = null,
+                VendorId = null,
+                COAId = x.Key.HasValue ? x.Key.Value : 1,
+                IsDebit = false,
+                Remarks = null
+            }).ToList();
+
+            //Debit In VoucherDetail
+            voucherMaster.VoucherDetails.Add(new VoucherDetail()
+            {
+                CustomerId = salesItem.salesMaster.CustomerId,
+                VendorId = null,
+                IsDebit = true,
+                COAId = salesItem.customerCOAId,
+                Amount = voucherMaster.VoucherDetails.Sum(y => y.Amount),
+                Remarks = null
+            });
+            voucherMaster.TotalDebit = voucherMaster.VoucherDetails.Where(x => x.IsDebit).Sum(x => x.Amount);
+            voucherMaster.TotalCredit = voucherMaster.VoucherDetails.Where(x => !x.IsDebit).Sum(x => x.Amount);
+
+            await _dbContext.VoucherMasters.AddAsync(voucherMaster);
+
+            await _dbContext.SaveChangesAsync();
+
+            salesItem.salesMaster.VoucherMasterId = voucherMaster.Id;
+            salesItem.salesMaster.IsPosted = true;
+            var count = await _dbContext.SaveChangesAsync();
+            return count > 0;
         }
     }
 }

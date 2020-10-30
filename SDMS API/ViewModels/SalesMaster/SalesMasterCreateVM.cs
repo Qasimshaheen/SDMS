@@ -13,7 +13,6 @@ namespace SDMS_API.ViewModels.SalesMaster
         public DateTime Date { get; set; }
         [Required]
         public int CustomerId { get; set; }
-        public decimal TotalAmount { get; set; }
         public decimal DiscountPerc { get; set; }
         public decimal DiscountAmount { get; set; }
         [StringLength(100)]
