@@ -41,7 +41,7 @@ namespace SDMS_API.Controllers
         [HttpGet]
         public async Task<IEnumerable<ProductLedgerListingVM>> GetProductLedgersByTransNo(string TransNo)
         {
-            var results = await _dbContext.ProductLedgers.Where(x=> x.TransNo==TransNo).Select(x => new ProductLedgerListingVM
+            var results = await _dbContext.ProductLedgers.Where(x => x.TransNo == TransNo).Select(x => new ProductLedgerListingVM
             {
                 Id = x.Id,
                 ProductName = x.TblProduct.Name,
@@ -86,6 +86,19 @@ namespace SDMS_API.Controllers
             else
                 return false;
         }
+        [HttpDelete]
+        public async Task<bool> DeleteProductLedgerByTransNo(string transNo)
+        {
+            var result = await _dbContext.ProductLedgers.Where(x => x.TransNo == transNo).ToListAsync();
+            if (result != null)
+            {
+                _dbContext.ProductLedgers.RemoveRange(result);
+                var count = await _dbContext.SaveChangesAsync();
+                return count > 0;
+            }
+            else
+                return false;
+        }
         [HttpPost]
         public async Task<int> CreateProductLedger(ProductLedgerCreateVM model)
         {
@@ -101,8 +114,8 @@ namespace SDMS_API.Controllers
                     IsOut = model.IsOut,
                     WarehouseId = model.WarehouseId,
                     BatchNo = model.BatchNo,
-                    AddedBy=model.AddedBy,
-                    AddedOn=DateTime.Now,
+                    AddedBy = model.AddedBy,
+                    AddedOn = DateTime.Now,
                     Remarks = model.Remarks
                 };
                 await _dbContext.ProductLedgers.AddAsync(productLedger);
