@@ -148,14 +148,14 @@ namespace SDMS_API.Controllers
                     result.WarehouseId = model.WarehouseId;
                     result.UpdatedBy = model.UpdatedBy;
                     result.UpdatedOn = model.UpdatedOn;
-                    var existingManufacturingDetails = await _dbContext.ManufacturingDetails.Where(x => x.ManufacturingMasterId == model.Id).Include(x=> x.ManufacturingRawDetails).ToListAsync();
+                    var existingManufacturingDetails = await _dbContext.ManufacturingDetails.Where(x => x.ManufacturingMasterId == model.Id).Include(x => x.ManufacturingRawDetails).ToListAsync();
                     if (existingManufacturingDetails != null && existingManufacturingDetails.Count > 0)
                     {
                         _dbContext.ManufacturingDetails.RemoveRange(existingManufacturingDetails);
                     }
                     var manufacturingDetails = model.ManufacturingDetails.Select(x => new ManufacturingDetail
                     {
-                        ManufacturingMasterId=model.Id,
+                        ManufacturingMasterId = model.Id,
                         ProductId = x.ProductId,
                         ManufacturingRawDetails = x.ManufacturingRawDetails.Select(y => new ManufacturingRawDetail
                         {
@@ -175,5 +175,64 @@ namespace SDMS_API.Controllers
             else
                 return false;
         }
+        [HttpPost]
+        public async Task<bool> PostManufacturing(int manufacturingId)
+        {
+
+            var manufacturingItem = await _dbContext.ManufacturingMasters.Where(x => x.Id == manufacturingId).Select(mMaster => new
+            {
+                manufacturingMaster = mMaster,
+                manufacturingDetail = mMaster.ManufacturingDetails.Select(mDetails => new
+                {
+                    mDetails.ProductId,
+                    rawItems = mDetails.ManufacturingRawDetails
+                })
+            }).FirstOrDefaultAsync();
+
+            foreach (var mDetailItem in manufacturingItem.manufacturingDetail)
+            {
+                foreach (var rawItem in mDetailItem.rawItems)
+                {
+                    var productledger = new ProductLedger()
+                    {
+                        ProductId = mDetailItem.ProductId.HasValue ? mDetailItem.ProductId.Value : 1,
+                        Date = manufacturingItem.manufacturingMaster.Date,
+                        TransNo = manufacturingItem.manufacturingMaster.Code,
+                        Quantity = rawItem.Quantity,
+                        IsOut=true,
+                        WarehouseId=rawItem.WarehouseId.HasValue ? rawItem.WarehouseId.Value :1,
+                        BatchNo=rawItem.BatchNo,
+                        AddedBy=manufacturingItem.manufacturingMaster.AddedBy,
+                        AddedOn=DateTime.UtcNow.AddHours(5),
+
+                    };
+
+                    await _dbContext.ProductLedgers.AddAsync(productledger);
+                }
+            }
+
+            var productledgerIn = new ProductLedger()
+            {
+                ProductId = manufacturingItem.manufacturingMaster.ProductId.HasValue ? manufacturingItem.manufacturingMaster.ProductId.Value : 1,
+                Date = manufacturingItem.manufacturingMaster.Date,
+                TransNo = manufacturingItem.manufacturingMaster.Code,
+                Quantity = manufacturingItem.manufacturingMaster.Quantity,
+                IsOut = false,
+                WarehouseId=manufacturingItem.manufacturingMaster.WarehouseId,
+                BatchNo = manufacturingItem.manufacturingMaster.BatchNo,
+                AddedBy = manufacturingItem.manufacturingMaster.AddedBy,
+                AddedOn = DateTime.UtcNow.AddHours(5),
+            };
+
+            await _dbContext.ProductLedgers.AddAsync(productledgerIn);
+
+            manufacturingItem.manufacturingMaster.IsPosted = true;
+
+           var count = await _dbContext.SaveChangesAsync();
+
+
+            return count > 0;
+        }
+
     }
 }
