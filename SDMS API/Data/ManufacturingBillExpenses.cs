@@ -9,12 +9,12 @@ namespace SDMS_API.Data
     public class ManufacturingBillExpenses
     {
         public int Id { get; set; }
-        public int BillDetailId { get; set; }
+        public int BillId { get; set; }
         public int COAId { get; set; }
         public decimal Amount { get; set; }
         [ForeignKey(nameof(COAId))]
         public ChartofAccount TblChartofAccount { get; set; }
-        [ForeignKey(nameof(BillDetailId))]
-        public ManufacturingBillProductDetail TblManufacturingBillProductDetail { get; set; }
+        [ForeignKey(nameof(BillId))]
+        public ManufacturingBillMaster  TblManufacturingBillMaster { get; set; }
     }
 }

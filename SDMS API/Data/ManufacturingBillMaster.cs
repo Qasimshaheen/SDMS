@@ -33,5 +33,6 @@ namespace SDMS_API.Data
         [ForeignKey(nameof(ManufacturingId))]
         public ManufacturingMaster TblManufacturingMaster { get; set; }
         public List<ManufacturingBillProductDetail> ManufacturingBillProductDetails { get; set; }
+        public List<ManufacturingBillExpenses> ManufacturingBillExpenses { get; set; }
     }
 }
