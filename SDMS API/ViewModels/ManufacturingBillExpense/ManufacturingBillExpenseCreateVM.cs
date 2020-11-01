@@ -7,5 +7,7 @@ namespace SDMS_API.ViewModels.ManufacturingBillExpense
 {
     public class ManufacturingBillExpenseCreateVM
     {
+        public int COAId { get; set; }
+        public decimal Amount { get; set; }
     }
 }
