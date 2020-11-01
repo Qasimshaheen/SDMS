@@ -14,7 +14,6 @@ namespace SDMS_API.ViewModels.ManufacturingBillMaster
         public DateTime Date { get; set; }
         public decimal RawMaterialCost { get; set; }
         public decimal ExpenseCost { get; set; }
-        public decimal TotalCost { get; set; }
         public int UpdatedBy { get; set; }
         public IEnumerable<ManufacturingBillDetailEditVM> ManufacturingBillDetails { get; set; }
         public IEnumerable<ManufacturingBillExpenseEditVM> ManufacturingBillExpenses { get; set; }

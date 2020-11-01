@@ -10,7 +10,7 @@ namespace SDMS_API.ViewModels.ManufacturingBillProductDetail
     {
         public int ProductId { get; set; }
         public decimal Quantity { get; set; }
-        public decimal Amount { get; set; }
+        public decimal Price { get; set; }
         [StringLength(50)]
         public string BatchNo { get; set; }
     }

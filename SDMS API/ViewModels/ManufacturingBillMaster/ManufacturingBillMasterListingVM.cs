@@ -15,7 +15,6 @@ namespace SDMS_API.ViewModels.ManufacturingBillMaster
         public string VoucherNumber { get; set; }
         public DateTime Date { get; set; }
         public string PostStatus { get; set; }
-        public string CreatedBy { get; set; }
         public IEnumerable<ManufacturingBillDetailListingVM> ManufacturingBillDetails { get; set; }
         public IEnumerable<ManufacturingBillExpenseListingVM> ManufacturingBillExpenses { get; set; }
     }
