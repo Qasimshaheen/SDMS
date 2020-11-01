@@ -53,5 +53,8 @@ namespace SDMS_API.Data
         public DbSet<ProductFormulaDetail> ProductFormulaDetails { get; set; }
         public DbSet<BankOpeningBalanceMaster> BankOpeningBalanceMasters { get; set; }
         public DbSet<BankOpeningBalanceDetail> BankOpeningBalanceDetails { get; set; }
+        public DbSet<ManufacturingBillMaster> ManufacturingBillMasters { get; set; }
+        public DbSet<ManufacturingBillProductDetail> ManufacturingBillProductDetails { get; set; }
+        public DbSet<ManufacturingBillExpenses> ManufacturingBillExpenses { get; set; }
     }
 }
