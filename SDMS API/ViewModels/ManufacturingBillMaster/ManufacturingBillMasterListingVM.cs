@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SDMS_API.ViewModels.ManufacturingBillExpense;
+using SDMS_API.ViewModels.ManufacturingBillProductDetail;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,5 +16,7 @@ namespace SDMS_API.ViewModels.ManufacturingBillMaster
         public DateTime Date { get; set; }
         public string PostStatus { get; set; }
         public string CreatedBy { get; set; }
+        public IEnumerable<ManufacturingBillDetailListingVM> ManufacturingBillDetails { get; set; }
+        public IEnumerable<ManufacturingBillExpenseListingVM> ManufacturingBillExpenses { get; set; }
     }
 }

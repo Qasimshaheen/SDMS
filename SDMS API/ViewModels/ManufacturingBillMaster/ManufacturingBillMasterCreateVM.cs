@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SDMS_API.ViewModels.ManufacturingBillExpense;
+using SDMS_API.ViewModels.ManufacturingBillProductDetail;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,5 +16,7 @@ namespace SDMS_API.ViewModels.ManufacturingBillMaster
         public decimal TotalCost { get; set; }
         public bool IsPosted { get; set; }
         public int AddedBy { get; set; }
+        public IEnumerable<ManufacturingBillDetailCreateVM> ManufacturingBillDetails { get; set; }
+        public IEnumerable<ManufacturingBillExpenseCreateVM> ManufacturingBillExpenses { get; set; }
     }
 }
