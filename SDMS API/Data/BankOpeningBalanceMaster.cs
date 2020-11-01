@@ -13,6 +13,6 @@ namespace SDMS_API.Data
         public bool IsPosted { get; set; }
         [ForeignKey(nameof(VoucherMasterId))]
         public VoucherMaster TblVoucherMaster { get; set; }
-        public List<BankOpeningBalanceDetail> TblbankOpeningBalanceDetails { get; set; }
+        public List<BankOpeningBalanceDetail> BankOpeningBalanceDetails { get; set; }
     }
 }
