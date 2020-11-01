@@ -38,5 +38,6 @@ namespace SDMS_API.Data
         [ForeignKey(nameof(FormulaMasterId))]
         public ProductFormulaMaster TblProductFormulaMaster { get; set; }
         public List<ManufacturingDetail> ManufacturingDetails { get; set; }
+        public List<ManufacturingBillMaster> ManufacturingBillMasters { get; set; }
     }
 }

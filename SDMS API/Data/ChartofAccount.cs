@@ -47,6 +47,7 @@ namespace SDMS_API.Data
         public List<Vendor> Vendors { get; set; }
         public List<VoucherDetail> VoucherDetails { get; set; }
         public List<BankAccoountDetail> BankAccoountDetails { get; set; }
+        public List<ManufacturingBillExpenses> ManufacturingBillExpenses { get; set; }
     }
 }
 

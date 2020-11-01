@@ -40,6 +40,10 @@
     <Compile Remove="Migrations\20201001174554_AddedProductNameColumnOrder.Designer.cs" />
     <Compile Remove="Migrations\20201015162639_AddedProductFormulEntites.cs" />
     <Compile Remove="Migrations\20201015162639_AddedProductFormulEntites.Designer.cs" />
+    <Compile Remove="Migrations\20201101103138_AddedBillOfManufacturingEntites.cs" />
+    <Compile Remove="Migrations\20201101103138_AddedBillOfManufacturingEntites.Designer.cs" />
+    <Compile Remove="Migrations\20201101103500_AddedBillOfManufacturingEntites.cs" />
+    <Compile Remove="Migrations\20201101103500_AddedBillOfManufacturingEntites.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

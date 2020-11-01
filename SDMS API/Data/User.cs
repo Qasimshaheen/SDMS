@@ -42,5 +42,9 @@ namespace SDMS_API.Data
         public List<SalesMaster> TblSalesMastersAddedBy { get; set; }
         [InverseProperty("TblUpdatedByUser")]
         public List<SalesMaster> TblSalesMastersUpdatedBy { get; set; }
+        [InverseProperty("TblAddedByUser")]
+        public List<ManufacturingBillMaster> TblManufacturingBillMastersAddedBy { get; set; }
+        [InverseProperty("TblUpdatedByUser")]
+        public List<ManufacturingBillMaster> TblManufacturingBillMasterUpdatedBy { get; set; }
     }
 }

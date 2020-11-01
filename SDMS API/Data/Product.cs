@@ -76,5 +76,6 @@ namespace SDMS_API.Data
         public List<PurchaseDetail> PurchaseDetails { get; set; }
         public List<SOrderDetail> SOrderDetails { get; set; }
         public List<SalesDetail> SalesDetails { get; set; }
+        public List<ManufacturingBillProductDetail> ManufacturingBillProductDetails { get; set; }
     }
 }
