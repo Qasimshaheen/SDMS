@@ -116,7 +116,7 @@ namespace SDMS_API.Controllers
                         _dbContext.ProductOpeningBalanceDetails.RemoveRange(existingProductOpeningDetals);
                     var productOpeningDetails = model.ProductOpeningDetails.Select(y => new ProductOpeningBalanceDetail
                     {
-                        ProductOBMId=result.Id,
+                        ProductOBMId = result.Id,
                         ProductId = y.ProductId,
                         WarehouseId = y.WarehouseId,
                         BatchNo = y.BatchNo,
@@ -130,6 +130,40 @@ namespace SDMS_API.Controllers
                 }
                 else
                     return false;
+            }
+            else
+                return false;
+        }
+        [HttpPost]
+        public async Task<bool> PostOpeningBalance(int openingMasterId)
+        {
+            if (openingMasterId != 0)
+            {
+                var openingProducts = await _dbContext.ProductOpeningBalanceMasters.Where(x => x.Id == openingMasterId).Select(mMaster => new
+                {
+                    openingMaster = mMaster,
+                    openingDetail = mMaster.ProductOpeningBalanceDetails
+                }).FirstOrDefaultAsync();
+
+                foreach (var masterDetailItem in openingProducts.openingDetail)
+                {
+                    var productLedger = new ProductLedger()
+                    {
+                        Date = openingProducts.openingMaster.Date,
+                        ProductId = masterDetailItem.ProductId,
+                        TransNo = "OB",
+                        Quantity = masterDetailItem.Quantity,
+                        WarehouseId = masterDetailItem.WarehouseId,
+                        BatchNo = masterDetailItem.BatchNo,
+                        IsOut = false,
+                        AddedBy = _dbContext.Users.AsNoTracking().Select(x => x.Id).FirstOrDefault(),
+                        AddedOn = DateTime.UtcNow.AddHours(5),
+                        Remarks = "Opening Balance"
+                    };
+                    await _dbContext.ProductLedgers.AddAsync(productLedger);
+                }
+                var count = await _dbContext.SaveChangesAsync();
+                return count > 0;
             }
             else
                 return false;
