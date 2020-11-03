@@ -10,6 +10,7 @@ namespace SDMS_API.ViewModels.ManufacturingDetail
     {
         public int Id { get; set; }
         public string ProductName { get; set; }
+        public decimal RequiredQuantity { get; set; }
         public IEnumerable<ManufacturingRawDetailDetailVM> ManufacturingRawDetails { get; set; }
     }
 }

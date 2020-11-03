@@ -40,6 +40,7 @@ namespace SDMS_API.Controllers
                 {
                     Id = y.Id,
                     ProductName = y.TblProduct.Name,
+                    RequiredQuantity=y.ManufacturingRawDetails.Sum(x=>x.Quantity)/ y.TblManufacturingMaster.Quantity,
                     ManufacturingRawDetails = y.ManufacturingRawDetails.Select(z => new ManufacturingRawDetailListingVM
                     {
                         Id = z.Id,
@@ -68,6 +69,7 @@ namespace SDMS_API.Controllers
                 {
                     Id = y.Id,
                     ProductName = y.TblProduct.Name,
+                    RequiredQuantity= y.ManufacturingRawDetails.Sum(x => x.Quantity) / y.TblManufacturingMaster.Quantity,
                     ManufacturingRawDetails = y.ManufacturingRawDetails.Select(z => new ManufacturingRawDetailDetailVM
                     {
                         Id = z.Id,
@@ -204,6 +206,7 @@ namespace SDMS_API.Controllers
                         BatchNo=rawItem.BatchNo,
                         AddedBy=manufacturingItem.manufacturingMaster.AddedBy,
                         AddedOn=DateTime.UtcNow.AddHours(5),
+                        Remarks="Manufacturing"
 
                     };
 
