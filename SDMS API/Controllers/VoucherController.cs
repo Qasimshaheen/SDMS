@@ -92,7 +92,7 @@ namespace SDMS_API.Controllers
             if (ModelState.IsValid)
             {
                 string lastVoucherNumber = string.Empty;
-                var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().Where(x => x.VoucherNumber.Substring(0,2) == model.VoucherNumberType).OrderByDescending(x => x.Id).FirstOrDefault();
+                var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().Where(x => x.VoucherNumber.Substring(0, 2) == model.VoucherNumberType).OrderByDescending(x => x.Id).FirstOrDefault();
                 if (LastVoucherNumber != null)
                     lastVoucherNumber = LastVoucherNumber.VoucherNumber;
 
@@ -166,6 +166,18 @@ namespace SDMS_API.Controllers
             }
             else
                 return false;
+        }
+        [HttpPost]
+        public async Task<bool> PostVoucher(int voucherMasterId,bool postEffect)
+        {
+            var result = await _dbContext.VoucherMasters.Where(x => x.Id == voucherMasterId).FirstOrDefaultAsync();
+            if (result != null)
+            {
+                result.IsPosted = postEffect;
+                var count = await _dbContext.SaveChangesAsync();
+                return count > 0;
+            }
+            return false;
         }
     }
 }
