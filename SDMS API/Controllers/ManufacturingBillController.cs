@@ -58,7 +58,7 @@ namespace SDMS_API.Controllers
         {
             var result = await _dbContext.ManufacturingBillMasters.Where(x => x.Id == manufacturingBillId).Select(x => new ManufacturingBillMasterDetailVM
             {
-                Id=x.Id,
+                Id = x.Id,
                 Code = x.Code,
                 Date = x.Date,
                 ManufacturingNumber = x.TblManufacturingMaster.Code,
@@ -176,6 +176,28 @@ namespace SDMS_API.Controllers
             }
             else
                 return false;
+        }
+
+
+        public async Task<bool> Test(int id)
+        {
+            var records = await _dbContext.ManufacturingRawDetails.Where(x => x.TblManufacturingDetail.ManufacturingMasterId == id).Select(x => new
+            {
+                x.TblManufacturingDetail.ProductId,
+                ProductName = x.TblManufacturingDetail.TblProduct.Name,
+                x.Quantity,
+                x.BatchNo,
+            }).ToListAsync();
+
+            var selectedBatchNo = records.Select(x => x.BatchNo);
+            var selectedProductId = records.Select(x => x.ProductId);
+
+            //var abc = await _dbContext.PurchaseMasters.Where(x => selectedBatchNo.Contains(x.BatchNo)).Select(x => x.PurchaseDetails.FirstOrDefault(y => y.ProductId))
+
+            //var productPrices = await _dbContext.PurchaseDetails.Where(x => selectedProductId.Contains(x.ProductId) && x.);
+
+
+            return false;
         }
     }
 }
