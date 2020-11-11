@@ -178,9 +178,11 @@ namespace SDMS_API.Controllers
                 return false;
         }
 
-
-        public async Task<bool> Test(int id)
+        [HttpGet]
+        public async Task<IEnumerable<RawMaterialPriceVM>> GetRawMaterialPrices(int id)
         {
+            //var abc = await _dbContext.PurchaseMasters.Where(x => selectedBatchNo.Contains(x.BatchNo)).Select(x => x.PurchaseDetails.FirstOrDefault(y => y.ProductId))
+
             var records = await _dbContext.ManufacturingRawDetails.Where(x => x.TblManufacturingDetail.ManufacturingMasterId == id).Select(x => new
             {
                 x.TblManufacturingDetail.ProductId,
@@ -192,12 +194,31 @@ namespace SDMS_API.Controllers
             var selectedBatchNo = records.Select(x => x.BatchNo);
             var selectedProductId = records.Select(x => x.ProductId);
 
-            //var abc = await _dbContext.PurchaseMasters.Where(x => selectedBatchNo.Contains(x.BatchNo)).Select(x => x.PurchaseDetails.FirstOrDefault(y => y.ProductId))
+            var productPurchasePrices = await _dbContext.PurchaseDetails.Where(x =>
+            selectedProductId.Contains(x.ProductId) &&
+            selectedBatchNo.Contains(x.TblPurchaseMaster.BatchNo))
+                .Select(x => new { x.Price, x.ProductId, x.TblPurchaseMaster.BatchNo }).ToListAsync();
 
-            //var productPrices = await _dbContext.PurchaseDetails.Where(x => selectedProductId.Contains(x.ProductId) && x.);
+
+            var productOpeningPrices = await _dbContext.ProductOpeningBalanceDetails
+                .Where(x => selectedProductId.Contains(x.ProductId) && selectedBatchNo.Contains(x.BatchNo))
+                .Select(x => new { x.Price, x.ProductId, x.BatchNo }).ToListAsync();
 
 
-            return false;
+            var response = records.Select(x => new RawMaterialPriceVM()
+            {
+                Id = x.ProductId ?? 0,
+                Name = x.ProductName,
+                Quantity = x.Quantity,
+                BatchNo = x.BatchNo,
+                AvgRate =
+                    productPurchasePrices.FirstOrDefault(y => y.BatchNo == x.BatchNo && y.ProductId == x.ProductId) != null ?
+                    productPurchasePrices.FirstOrDefault(y => y.BatchNo == x.BatchNo && y.ProductId == x.ProductId).Price :
+                    (productOpeningPrices.FirstOrDefault(y => y.BatchNo == x.BatchNo && y.ProductId == x.ProductId) != null ? 
+                    productOpeningPrices.FirstOrDefault(y => y.BatchNo == x.BatchNo && y.ProductId == x.ProductId).Price : 0)
+            }).ToList();
+
+            return response;
         }
     }
 }
