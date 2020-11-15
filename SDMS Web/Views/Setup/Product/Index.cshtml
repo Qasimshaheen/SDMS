@@ -1,0 +1,317 @@
+﻿@{
+    ViewData["Title"] = "Product";
+    ViewBag.PageHeading = "Product";
+}
+
+@section Styles{
+    <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/css/daterangepicker.css" rel="stylesheet" />
+    <link href="~/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+}
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="card card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title">Product Form</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <!----<form role="form">
+                    -->
+                    <div class="card-body" id="collapseExample">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Product Code</label>
+                                    <input type="text" class="form-control" placeholder="PC-000000" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <!-- Date -->
+                                <div class="form-group">
+                                    <label>Date:</label>
+                                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" />
+                                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.form group -->
+                                <!-- Date range -->
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- select -->
+                                <div class="form-group">
+                                    <label>Product Category</label>
+                                    <select class="form-control">
+                                        <option>option 1</option>
+                                        <option>option 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- select -->
+                                <div class="form-group">
+                                    <label for="unit">Product Unit</label>
+                                    <select id="unit" class="form-control">
+                                        <option>option 1</option>
+                                        <option>option 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="productName">Product Name</label>
+                                    <input type="text" class="form-control" id="productName" placeholder="Enter product name..">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="retailPrice">Retail Price</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Rs</span>
+                                        </div>
+                                        <input id="retailPrice" type="number" class="form-control" placeholder="125">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="unitPrice">Unit Price</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Rs</span>
+                                        </div>
+                                        <input id="unitPrice" type="number" class="form-control" placeholder="120">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="remarks">Remarks</label>
+                                    <textarea class="form-control" rows="2" id="remarks" placeholder="Enter Remarks ..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch3">
+                                <label class="custom-control-label" for="customSwitch3">Status</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-info" disabled>Update</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    <!--</form> -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- left column -->
+        <!-- right column -->
+        <div class="col-md-6">
+            <div class="card card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title">Product's Chart of Account</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" data-target="#collapse2" aria-expanded="false" aria-controls="collapseExample" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                    <div class="card-body" id="#collapse2">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- select -->
+                                <div class="form-group">
+                                    <label>Cost of Goods Sold</label>
+                                    <select class="form-control">
+                                        <option>option 1</option>
+                                        <option>option 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Inventory</label>
+                                    <select class="form-control">
+                                        <option>option 1</option>
+                                        <option>option 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- select -->
+                                <div class="form-group">
+                                    <label>Sales</label>
+                                    <select class="form-control">
+                                        <option>option 1</option>
+                                        <option>option 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Sales Discount</label>
+                                    <select class="form-control">
+                                        <option>option 1</option>
+                                        <option>option 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Sales Return</label>
+                                    <select class="form-control">
+                                        <option>option 1</option>
+                                        <option>option 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+        <!--/.col (right) -->
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3>Data Table</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="productTable" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Product Code</th>
+                                <th>Date</th>
+                                <th>Product Name</th>
+                                <th>Product Category</th>
+                                <th>Product Unit</th>
+                                <th>Unit Price</th>
+                                <th>Retail Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>PC-000001</td>
+                                <td>2008/11/28</td>
+                                <td>Ball Fiber Pillow</td>
+                                <td>Kham</td>
+                                <td>Kg</td>
+                                <td>120.00</td>
+                                <td>290.00</td>
+                                <td>Active</td>
+                            </tr>
+
+                            <tr>
+                                <td>PC-000002</td>
+                                <td>2019/01/23</td>
+                                <td>Roi Pillow</td>
+                                <td>New</td>
+                                <td>pcs</td>
+                                <td>100.00</td>
+                                <td>270.00</td>
+                                <td>Active</td>
+                            </tr>
+                            <tr>
+                                <td>PC-000003</td>
+                                <td>2020/02/14</td>
+                                <td>Poyster</td>
+                                <td>Recycled</td>
+                                <td>Kg</td>
+                                <td>110.00</td>
+                                <td>170.00</td>
+                                <td>Active</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/dataTables.responsive.min.js"></script>
+    <script src="~/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/daterangepicker.js"></script>
+    <script src="~/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+            $('#productTable').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#my-box').boxWidget({
+                animationSpeed: 500,
+                collapseTrigger: '#my-collapse-button-trigger',
+                collapseIcon: 'fa-minus',
+                expandIcon: 'fa-plus',
+                removeIcon: 'fa-times'
+            })
+        })
+    </script>
+    <script>
+        $(function () {
+            //Date range picker
+            $('#reservationdate').datetimepicker({
+                format: 'L'
+            });
+            //Date range picker
+        })
+    </script>
+}
