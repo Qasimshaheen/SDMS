@@ -17,6 +17,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="~/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/Select2-Bootstrap4.css">
+
     @RenderSection("Styles", required: false)
 </head>
 <body class="hold-transition sidebar-mini">
@@ -117,7 +120,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/js/adminlte.min.js" asp-append-version="true"></script>
+
+    <!--Select2-->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

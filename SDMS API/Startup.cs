@@ -28,7 +28,7 @@ namespace SDMS_API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SDMSDbContext>(x => { x.UseSqlServer(Configuration.GetConnectionString("SDMSConnectionString")); });
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddSwaggerGen();
             services.AddCors();

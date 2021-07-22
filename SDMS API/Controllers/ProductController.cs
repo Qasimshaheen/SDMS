@@ -63,7 +63,7 @@ namespace SDMS_API.Controllers
             return false;
         }
         [HttpPost]
-        public async Task<int> CreatePorduct(ProductCreateVM model)
+        public async Task<int> CreateProduct(ProductCreateVM model)
         {
             if (ModelState.IsValid)
             {
@@ -95,6 +95,7 @@ namespace SDMS_API.Controllers
             }
             return -1;
         }
+
         [HttpPut]
         public async Task<int> EditProduct(ProductEditVM model)
         {
