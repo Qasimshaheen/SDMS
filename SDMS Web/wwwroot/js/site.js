@@ -29,17 +29,36 @@ $(function () {
 
     $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
 
-        $('#ddlProductCategory').append(`<option disabled selected readonly>-- Please Select --</option>`);
+        $('.js-select2').append(`<option disabled selected readonly>-- Please Select --</option>`);
 
         $(data).each((i, e) => {
             $('#ddlProductCategory').append(`<option value="${e.id}">${e.name}</option>`);
         });
 
-        $('#ddlProductCategory').select2({
-            theme: "bootstrap"
+        $('.js-select2').select2({
+            theme: "bootstrap",
+            width: '100%!Important'
         });
 
     });
+
+    $.get(`${API_URL}/MeasureUnit/GetMeasureUnits`, function (data) {
+
+        $(data).each((i, e) => {
+            $('#ddlProductUnit').append(`<option value="${e.id}">${e.name}</option>`);
+        });
+    });
+
+
+    $.get(`${API_URL}/ChartOfAccount/GetChartOfAccounts`, function (data) {
+
+        $(data).each((i, e) => {
+            $('.chartofAccount-select2').append(`<option value="${e.id}">${e.name}</option>`);
+        });
+    });
+
+
+
 
     $("#frmProduct").submit(function (event) {
         event.preventDefault();
@@ -70,7 +89,16 @@ $(function () {
 
                 loadProducts();
 
-                alert('Data Saved Succesfully!');
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Saved',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Added Successfully.'
+                });
+
+                //alert('Data Saved Succesfully!');
             },
             error: function (err) {
                 console.log(err);
