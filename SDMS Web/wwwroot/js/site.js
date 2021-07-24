@@ -1,7 +1,8 @@
 ﻿const API_URL = `https://localhost:44309/api`;
 
-
+// #region formDataAndLoadSelect
 function loadProducts() {
+    
     $.get(`${API_URL}/Product/GetProducts`, function (data) {
 
         $('#productTable>tbody').html('');
@@ -24,6 +25,45 @@ function loadProducts() {
     });
 
 }
+
+
+
+function loadCategories() {
+    
+    $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
+        $('#CategoryTable>tbody').html('');
+        $(data).each((i, e) => {
+            $('#CategoryTable>tbody').append(
+                `<tr>
+                    <td>${e.id}</td>
+                    <td>${e.name}</td>
+                </tr>`
+            );
+            $('#CategoryTable').DataTable();
+        });
+    });
+}
+
+function loadMeasures() {
+
+    $.get(`${API_URL}/MeasureUnit/GetMeasureUnits`, function (data) {
+        $('#MeasureTable>tbody').html('');
+        $(data).each((i, e) => {
+            $('#MeasureTable>tbody').append(
+                `<tr>
+                    <td>${e.id}</td>
+                    <td>${e.name}</td>
+                </tr>`
+            );
+            $('#MeasureTable').DataTable();
+        });
+    });
+}
+
+// #endregion
+
+
+// #region formDataAndLoadSelect
 
 $(function () {
 
@@ -56,7 +96,6 @@ $(function () {
             $('.chartofAccount-select2').append(`<option value="${e.id}">${e.name}</option>`);
         });
     });
-
 
 
 
@@ -109,3 +148,5 @@ $(function () {
     });
 
 });
+
+// #endregion
