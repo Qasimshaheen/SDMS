@@ -7,15 +7,20 @@ function loadProducts() {
         ajax: {
 
             url: `${API_URL}/Product/GetProducts`,
-            dataSrc:''
+            dataSrc: ''
         },
         columns: [
-            { data: 'id' },
             { data: 'code' },
             { data: 'name' },
             { data: 'date' },
             { data: 'categoryName' },
             { data: 'measureUnitName' },
+            {
+                data: 'id', render: function (data, type, row, meta) {
+                    return "<button class='btn btn-info fas fa-edit mr-1'></button>" +
+                        "<button class='btn btn-danger fas fa-trash-alt mr-1'></button>";
+                }
+            }
         ]
     });
 }
@@ -28,8 +33,13 @@ function loadCategories() {
             "dataSrc": ''
         },
         columns: [
-            { data: 'id' },
-            { data: 'name' }
+            { data: 'name' },
+            {
+                data: 'id', render: function (data, type, row, meta) {
+                    return "<button class='btn btn-info fas fa-edit mr-1'></button>" +
+                        "<button class='btn btn-danger fas fa-trash-alt mr-1'></button>";
+                }
+            }
         ]
     });
 
@@ -40,11 +50,16 @@ function loadMeasures() {
     $("#MeasureTable").DataTable({
         "ajax": {
             "url": `${API_URL}/MeasureUnit/GetMeasureUnits`,
-            "dataSrc" : ''
+            "dataSrc": ''
         },
         columns: [
-            { data: 'id' },
-            {data: 'name'}
+            { data: 'name' },
+            {
+                data: 'id', render: function (data, type, row, meta) {
+                    return "<button class='btn btn-info fas fa-edit mr-1'></button>" +
+                        "<button class='btn btn-danger fas fa-trash-alt mr-1'></button>";
+                }
+            }
         ]
 
     });
@@ -127,7 +142,7 @@ $(function () {
                     delay: 750,
                     body: 'Record Added Successfully.'
                 });
-                
+
                 document.getElementById("frmProduct").reset();
 
                 //$(".js-select2").select2('val', '-- Please Select --');
@@ -191,7 +206,7 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-                
+
                 $("#MeasureTable").DataTable().clear();
                 $("#MeasureTable").DataTable().ajax.reload();
 
