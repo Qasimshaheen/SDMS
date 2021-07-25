@@ -2,7 +2,7 @@
 
 // #region LoadSelect
 function loadProducts() {
-    
+
     $.get(`${API_URL}/Product/GetProducts`, function (data) {
 
         $('#productTable>tbody').html('');
@@ -27,7 +27,7 @@ function loadProducts() {
 }
 
 function loadCategories() {
-    
+
     $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
         $('#CategoryTable>tbody').html('');
         $(data).each((i, e) => {
@@ -62,7 +62,7 @@ $(function () {
 
     $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
 
-        $('.js-select2').append(`<option disabled selected readonly>-- Please Select --</option>`);
+        $('.js-select2').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
 
         $(data).each((i, e) => {
             $('#ddlProductCategory').append(`<option value="${e.id}">${e.name}</option>`);
@@ -135,6 +135,13 @@ $(function () {
                     delay: 750,
                     body: 'Record Added Successfully.'
                 });
+                
+                document.getElementById("frmProduct").reset();
+
+                //$(".js-select2").select2('val', '-- Please Select --');
+                $(".js-select2").val('0');
+                $('.js-select2').trigger('change');
+                //$('.js-select2').val(null).trigger('change');
 
                 //alert('Data Saved Succesfully!');
             },
@@ -170,6 +177,7 @@ $(function () {
                     body: 'Record Added Successfully.'
                 });
 
+                document.getElementById("frmCategories").reset();
             },
             error: function (err) {
                 console.log(err);
@@ -180,7 +188,6 @@ $(function () {
 
     $("#frmMeasureUnit").submit(function (event) {
         event.preventDefault();
-        debugger
         let frmData = {
             "name": $('input[name="name"]').val()
         };
@@ -200,6 +207,8 @@ $(function () {
                     delay: 750,
                     body: 'Record Added Successfully.'
                 });
+
+                document.getElementById("frmMeasureUnit").reset();
 
             },
             error: function (err) {
