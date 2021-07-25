@@ -3,58 +3,50 @@
 // #region LoadSelect
 function loadProducts() {
 
-    $.get(`${API_URL}/Product/GetProducts`, function (data) {
+    $("#productTable").DataTable({
+        ajax: {
 
-        $('#productTable>tbody').html('');
-
-        $(data).each((i, e) => {
-
-            $('#productTable>tbody').append(
-                `<tr>
-                                <td>${e.id}</td>
-                                <td>${e.code}</td>
-                                <td>${e.name}</td>
-                                <td>${e.date}</td>
-                                <td>${e.categoryName}</td>
-                                <td>${e.measureUnitName}</td>
-                             </tr>`);
-        });
-
-        $('#productTable').DataTable();
-
+            url: `${API_URL}/Product/GetProducts`,
+            dataSrc:''
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'code' },
+            { data: 'name' },
+            { data: 'date' },
+            { data: 'categoryName' },
+            { data: 'measureUnitName' },
+        ]
     });
-
 }
 
 function loadCategories() {
 
-    $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
-        $('#CategoryTable>tbody').html('');
-        $(data).each((i, e) => {
-            $('#CategoryTable>tbody').append(
-                `<tr>
-                    <td>${e.id}</td>
-                    <td>${e.name}</td>
-                </tr>`
-            );
-            $('#CategoryTable').DataTable();
-        });
+    $("#CategoryTable").DataTable({
+        "ajax": {
+            "url": `${API_URL}/ProductCategory/GetProductCategories`,
+            "dataSrc": ''
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'name' }
+        ]
     });
+
 }
 
 function loadMeasures() {
 
-    $.get(`${API_URL}/MeasureUnit/GetMeasureUnits`, function (data) {
-        $('#MeasureTable>tbody').html('');
-        $(data).each((i, e) => {
-            $('#MeasureTable>tbody').append(
-                `<tr>
-                    <td>${e.id}</td>
-                    <td>${e.name}</td>
-                </tr>`
-            );
-            $('#MeasureTable').DataTable();
-        });
+    $("#MeasureTable").DataTable({
+        "ajax": {
+            "url": `${API_URL}/MeasureUnit/GetMeasureUnits`,
+            "dataSrc" : ''
+        },
+        columns: [
+            { data: 'id' },
+            {data: 'name'}
+        ]
+
     });
 }
 
@@ -166,7 +158,8 @@ $(function () {
             success: function (response) {
                 console.log(response);
 
-                loadCategories();
+                $("#CategoryTable").DataTable().clear();
+                $("#CategoryTable").DataTable().ajax.reload();
 
                 $(document).Toasts('create', {
                     class: 'bg-success',
@@ -198,7 +191,10 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-                loadMeasures();
+                
+                $("#MeasureTable").DataTable().clear();
+                $("#MeasureTable").DataTable().ajax.reload();
+
                 $(document).Toasts('create', {
                     class: 'bg-success',
                     title: 'Saved',
