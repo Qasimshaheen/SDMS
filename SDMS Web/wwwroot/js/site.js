@@ -1,6 +1,6 @@
 ﻿const API_URL = `https://localhost:44309/api`;
 
-// #region formDataAndLoadSelect
+// #region LoadSelect
 function loadProducts() {
     
     $.get(`${API_URL}/Product/GetProducts`, function (data) {
@@ -25,8 +25,6 @@ function loadProducts() {
     });
 
 }
-
-
 
 function loadCategories() {
     
@@ -60,11 +58,6 @@ function loadMeasures() {
     });
 }
 
-// #endregion
-
-
-// #region formDataAndLoadSelect
-
 $(function () {
 
     $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
@@ -97,8 +90,14 @@ $(function () {
         });
     });
 
+});
+
+// #endregion
 
 
+// #region formData
+
+$(function () {
     $("#frmProduct").submit(function (event) {
         event.preventDefault();
 
@@ -147,6 +146,71 @@ $(function () {
 
     });
 
-});
+    $("#frmCategories").submit(function (event) {
+        event.preventDefault();
+        let frmData = {
+            "name": $('input[name="name"]').val()
+        };
+        $.ajax({
+            url: `${API_URL}/ProductCategory/CreateProductCategory`,
+            type: "POST",
+            data: JSON.stringify(frmData),
+            contentType: 'application/json',
+            success: function (response) {
+                console.log(response);
 
+                loadCategories();
+
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Saved',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Added Successfully.'
+                });
+
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+    });
+
+    $("#frmMeasureUnit").submit(function (event) {
+        event.preventDefault();
+        debugger
+        let frmData = {
+            "name": $('input[name="name"]').val()
+        };
+        $.ajax({
+            url: `${API_URL}/MeasureUnit/CreateMeasureUnit`,
+            type: "POST",
+            data: JSON.stringify(frmData),
+            contentType: 'application/json',
+            success: function (response) {
+                console.log(response);
+                loadMeasures();
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Saved',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Added Successfully.'
+                });
+
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+
+});
 // #endregion
+
+// #region Clear Fields
+
+//#endregion

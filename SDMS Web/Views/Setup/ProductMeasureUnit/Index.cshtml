@@ -1,26 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Product";
-    ViewBag.PageHeading = "Product Category";
+    ViewBag.PageHeading = "Product Measure Unit";
 }
 
 
-
-
 <section class="content">
-    <form id="frmCategories">
-        <div class="row">
+    <form id="frmMeasureUnit">
 
+        <div class="row">
             <div class="col-md-6">
                 <div class="card card-secondary">
                     <div class="card-header">
-                        <h3 class="card-title">Product Category</h3>
+                        <h3 class="card-title">Product Measure</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="CategoryName">Category Name</label>
-                                    <input id="CategoryName" name="name" type="text" class="form-control" placeholder="Enter Product Category">
+                                    <label for="name">Measure Unit</label>
+                                    <input name="name" type="text" class="form-control" placeholder="Enter Product Measure">
                                 </div>
                             </div>
                         </div>
@@ -34,18 +32,19 @@
             </div>
 
 
+
             <div class="col-md-6">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Products Categories</h3>
+                        <h3 class="card-title">Products Measures</h3>
                     </div>
 
                     <div class="card-body">
-                        <table id="CategoryTable" class="table table-bordered table-hover">
+                        <table id="MeasureTable" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Category Name</th>
+                                    <th>Measure Unit</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -56,13 +55,14 @@
             </div>
 
         </div>
+
     </form>
+
+
 </section>
-
 @section Scripts{
-    <script>
-
-        loadCategories();
-
+    <script type="text/javascript">
+        loadMeasures();
     </script>
+
 }
