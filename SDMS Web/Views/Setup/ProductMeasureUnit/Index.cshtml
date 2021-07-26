@@ -3,69 +3,70 @@
     ViewBag.PageHeading = "Product Measure Unit";
 }
 
-
 <section class="content">
-    <form id="frmMeasureUnit">
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card card-secondary">
-                    <div class="card-header">
-                        <h3 class="card-title">Product Measure</h3>
-                    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title">Product Measure</h3>
+                </div>
+                <form id="frmMeasureUnit">
+                    <input type="hidden" id="hdnMeasureUnitId" />
+
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="name">Measure Unit</label>
-                                    <input name="name" type="text" class="form-control" placeholder="Enter Product Measure">
+                                    <input id="txtMeasureUnit" name="name" type="text" class="form-control" placeholder="Enter Product Measure">
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="card-footer">
-                        <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
-                        <button type="submit" id="btnUpdate" class="btn btn-info" disabled>Update</button>
-                        <button type="submit" id="btnDelete" class="btn btn-danger" disabled>Delete</button>
+                        <button type="button" id="btnMeasureUnitCreate" class="btn btn-primary">Submit</button>
+                        <button type="button" id="btnMeasureUnitUpdate" class="btn btn-info" disabled>Update</button>
+                        <button type="button" id="btnMeasureUnitReset" class="btn btn-secondary pull-right" disabled>Reset</button>
                     </div>
-                </div>
+
+                </form>
             </div>
-
-
-
-            <div class="col-md-6">
-                <div class="card card-info">
-                    <div class="card-header">
-                        <h3 class="card-title">Products Measures</h3>
-                    </div>
-
-                    <div class="card-body">
-                        <table id="MeasureTable" class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Measure Unit</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
 
-    </form>
+
+
+        <div class="col-md-6">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Products Measures</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="MeasureTable" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Measure Unit</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
 
 
 </section>
 @section Scripts{
+
     <script type="text/javascript">
-        loadMeasures();
-
-        
+        loadMeasureUnitsForGrid();
     </script>
-
 
 }

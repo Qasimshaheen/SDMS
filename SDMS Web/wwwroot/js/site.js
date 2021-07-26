@@ -36,8 +36,8 @@ function loadCategories() {
             { data: 'name' },
             {
                 data: 'id', render: function (data, type, row, meta) {
-                    return "<button class='btn btn-info fas fa-edit mr-1'></button>" +
-                        "<button class='btn btn-danger fas fa-trash-alt mr-1'></button>";
+                    return "<button class='btn btn-info fas fa-edit mr-1' onClick=EditCategory(" + JSON.stringify(row) + ")></button>" +
+                        "<button class='btn btn-danger fas fa-trash-alt mr-1' onClick=Delete(" + JSON.stringify(row) + ")></button>";
                 }
             }
         ]
@@ -45,7 +45,7 @@ function loadCategories() {
 
 }
 
-function loadMeasures() {
+function loadMeasureUnitsForGrid() {
 
     $("#MeasureTable").DataTable({
         "ajax": {
@@ -56,8 +56,8 @@ function loadMeasures() {
             { data: 'name' },
             {
                 data: 'id', render: function (data, type, row, meta) {
-                    return "<button class='btn btn-info fas fa-edit mr-1'></button>" +
-                        "<button class='btn btn-danger fas fa-trash-alt mr-1'></button>";
+                    return `<button type="button" class="btn btn-info fas fa-edit mr-1" onClick=measureUnitGET('${row.id}')></button> 
+                            <button type="button" class="btn btn-danger fas fa-trash-alt mr-1" onClick=deleteMeasureUnit('${row.id}')></button>`;
                 }
             }
         ]
@@ -65,8 +65,44 @@ function loadMeasures() {
     });
 }
 
-$(function () {
+function deleteMeasureUnit(recordID) {
 
+    $.ajax({
+        url: `${API_URL}/MeasureUnit/DeleteMeasureUnitById?mesureUnitId=` + recordID,
+        method: 'DELETE',
+        success: function (data) {
+            alert("Deleted");
+            $("#MeasureTable").DataTable().clear();
+            $("#MeasureTable").DataTable().ajax.reload();
+
+        },
+        error: function (err) {
+            console.log(err.responseText);
+        }
+    });
+
+
+}
+
+function measureUnitGET(recordId) {
+
+    $('#btnMeasureUnitCreate').attr('disabled', 'disabled');
+    $('#btnMeasureUnitUpdate').removeAttr('disabled');
+
+
+    $.get(`${API_URL}/MeasureUnit/GetMeasureUnitsById?mesureUnitId=${recordId}`, function (data) {
+        $('#hdnMeasureUnitId').val(data.id);
+        $('#txtMeasureUnit').val(data.name);
+    });
+
+}
+
+function EditCategory(data) {
+    debugger
+    $('input[name="name"]').val(data.name);
+}
+
+function loadProductCategories() {
     $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
 
         $('.js-select2').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
@@ -82,6 +118,9 @@ $(function () {
 
     });
 
+}
+
+function loadMeasureUnits() {
     $.get(`${API_URL}/MeasureUnit/GetMeasureUnits`, function (data) {
 
         $(data).each((i, e) => {
@@ -89,15 +128,16 @@ $(function () {
         });
     });
 
+}
 
+function loadChartOfAccounts() {
     $.get(`${API_URL}/ChartOfAccount/GetChartOfAccounts`, function (data) {
 
         $(data).each((i, e) => {
             $('.chartofAccount-select2').append(`<option value="${e.id}">${e.name}</option>`);
         });
     });
-
-});
+}
 
 // #endregion
 
@@ -194,10 +234,10 @@ $(function () {
 
     });
 
-    $("#frmMeasureUnit").submit(function (event) {
-        event.preventDefault();
+    $('body').on('click', '#btnMeasureUnitCreate', function () {
+        debugger
         let frmData = {
-            "name": $('input[name="name"]').val()
+            name: $('#txtMeasureUnit').val()
         };
         $.ajax({
             url: `${API_URL}/MeasureUnit/CreateMeasureUnit`,
@@ -206,7 +246,7 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-
+                debugger
                 $("#MeasureTable").DataTable().clear();
                 $("#MeasureTable").DataTable().ajax.reload();
 
@@ -224,6 +264,47 @@ $(function () {
             },
             error: function (err) {
                 console.log(err);
+            }
+        });
+    });
+
+    $('body').on('click', '#btnMeasureUnitUpdate', function () {
+        debugger
+        let frmData = {
+            id: $('#hdnMeasureUnitId').val(),
+            name: $('#txtMeasureUnit').val()
+        };
+        $.ajax({
+            url: `${API_URL}/MeasureUnit/EditMeasureUnt`,
+            type: "PUT",
+            data: JSON.stringify(frmData),
+            contentType: 'application/json',
+            success: function (response) {
+                console.log(response);
+                debugger
+                $("#MeasureTable").DataTable().clear();
+                $("#MeasureTable").DataTable().ajax.reload();
+
+                $(document).Toasts('update', {
+                    class: 'bg-success',
+                    title: 'Saved',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Updated Successfully.'
+                });
+
+                document.getElementById("frmMeasureUnit").reset();
+
+            },
+            error: function (err) {
+                console.log(err);
+            },
+            complete: function () {
+
+                $('#btnMeasureUnitUpdate').attr('disabled', 'disabled');
+                $('#btnMeasureUnitCreate').removeAttr('disabled');
+
             }
         });
     });
