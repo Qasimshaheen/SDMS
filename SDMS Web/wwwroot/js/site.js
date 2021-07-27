@@ -36,8 +36,9 @@ function loadCategoriesForGrid() {
             { data: 'name' },
             {
                 data: 'id', render: function (data, type, row, meta) {
-                    return "<button class='btn btn-info fas fa-edit mr-1' onClick=EditCategory(" + JSON.stringify(row) + ")></button>" +
-                        "<button class='btn btn-danger fas fa-trash-alt mr-1' onClick=Delete(" + JSON.stringify(row) + ")></button>";
+                    return `<button type="button" class="btn btn-info fas fa-edit mr-1" onClick=productCategoryGET('${row.id}')></button> 
+                            <button type="button" class="btn btn-danger fas fa-trash-alt mr-1" onClick=productCategoryDelete('${row.id}')></button>`;
+
                 }
             }
         ]
@@ -56,16 +57,14 @@ function loadMeasureUnitsForGrid() {
             { data: 'name' },
             {
                 data: 'id', render: function (data, type, row, meta) {
-                    return `<button type="button" class="btn btn-info fas fa-edit mr-1" onClick=measureUnitGET('${row.id}')></button> 
-                            <button type="button" class="btn btn-danger fas fa-trash-alt mr-1" onClick=deleteMeasureUnit('${row.id}')></button>`;
+                    return `<button type="button" class="btn btn-info fas fa-edit mr-1" onClick=productCategoryGET('${row.id}')></button> 
+                            <button type="button" class="btn btn-danger fas fa-trash-alt mr-1" onClick=productCategoryDelete('${row.id}')></button>`;
                 }
             }
         ]
 
     });
 }
-
-
 
 function loadProductCategories() {
     $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
@@ -147,10 +146,44 @@ function measureUnitGET(recordId) {
 
 }
 
-function EditCategory(data) {
-    debugger
-    $('input[name="name"]').val(data.name);
+function productCategoryGET(recordId) {
+
+    $('#btnProductCategoryCreate').attr('disabled', 'disabled');
+    $('#btnProductCategoryUpdate').removeAttr('disabled');
+
+
+    $.get(`${API_URL}/ProductCategory/GetProductCategoryById?ProductCategoryId=${recordId}`, function (data) {
+        $('#hdnProductCategoryId').val(data.id);
+        $('#txtProductCategoryName').val(data.name);
+    });
+
 }
+function productCategoryDelete(recordID) {
+
+    $.ajax({
+        url: `${API_URL}/ProductCategory/DeleteProductCategoryById?ProductCategoryId=` + recordID,
+        method: 'DELETE',
+        success: function (data) {
+            $(document).Toasts('create', {
+                class: 'bg-danger',
+                title: 'Deleted',
+                subtitle: '',
+                autohide: true,
+                delay: 750,
+                body: 'Record Deleted Successfully.'
+            });
+            $("#CategoryTable").DataTable().clear();
+            $("#CategoryTable").DataTable().ajax.reload();
+
+        },
+        error: function (err) {
+            console.log(err.responseText);
+        }
+    });
+
+
+}
+
 //#endregion
 
 
@@ -213,10 +246,10 @@ $(function () {
 
     });
 
-    $("#frmCategories").submit(function (event) {
-        event.preventDefault();
+    $('body').on('click', '#btnProductCategoryCreate', function () {
+        debugger
         let frmData = {
-            "name": $('input[name="name"]').val()
+            name: $('#txtProductCategoryName').val()
         };
         $.ajax({
             url: `${API_URL}/ProductCategory/CreateProductCategory`,
@@ -225,7 +258,7 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-
+                debugger
                 $("#CategoryTable").DataTable().clear();
                 $("#CategoryTable").DataTable().ajax.reload();
 
@@ -239,13 +272,57 @@ $(function () {
                 });
 
                 document.getElementById("frmCategories").reset();
+
             },
             error: function (err) {
                 console.log(err);
             }
         });
-
     });
+
+    $('body').on('click', '#btnProductCategoryUpdate', function () {
+        debugger
+        let frmData = {
+            id: $('#hdnProductCategoryId').val(),
+            name: $('#txtProductCategoryName').val()
+        };
+        $.ajax({
+            url: `${API_URL}/ProductCategory/EditProductCategory`,
+            type: "PUT",
+            data: JSON.stringify(frmData),
+            contentType: 'application/json',
+            success: function (response) {
+                console.log(response);
+                debugger
+
+
+                $("#CategoryTable").DataTable().clear();
+                $("#CategoryTable").DataTable().ajax.reload();
+
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Update',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Updated Successfully.'
+                });
+
+                document.getElementById("frmCategories").reset();
+
+            },
+            error: function (err) {
+                console.log(err);
+            },
+            complete: function () {
+
+                $('#btnProductCategoryUpdate').attr('disabled', 'disabled');
+                $('#btnProductCategoryCreate').removeAttr('disabled');
+
+            }
+        });
+    });
+
 
     $('body').on('click', '#btnMeasureUnitCreate', function () {
         debugger
