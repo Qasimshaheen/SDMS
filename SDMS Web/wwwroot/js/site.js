@@ -25,7 +25,7 @@ function loadProducts() {
     });
 }
 
-function loadCategories() {
+function loadCategoriesForGrid() {
 
     $("#CategoryTable").DataTable({
         "ajax": {
@@ -65,42 +65,7 @@ function loadMeasureUnitsForGrid() {
     });
 }
 
-function deleteMeasureUnit(recordID) {
 
-    $.ajax({
-        url: `${API_URL}/MeasureUnit/DeleteMeasureUnitById?mesureUnitId=` + recordID,
-        method: 'DELETE',
-        success: function (data) {
-            alert("Deleted");
-            $("#MeasureTable").DataTable().clear();
-            $("#MeasureTable").DataTable().ajax.reload();
-
-        },
-        error: function (err) {
-            console.log(err.responseText);
-        }
-    });
-
-
-}
-
-function measureUnitGET(recordId) {
-
-    $('#btnMeasureUnitCreate').attr('disabled', 'disabled');
-    $('#btnMeasureUnitUpdate').removeAttr('disabled');
-
-
-    $.get(`${API_URL}/MeasureUnit/GetMeasureUnitsById?mesureUnitId=${recordId}`, function (data) {
-        $('#hdnMeasureUnitId').val(data.id);
-        $('#txtMeasureUnit').val(data.name);
-    });
-
-}
-
-function EditCategory(data) {
-    debugger
-    $('input[name="name"]').val(data.name);
-}
 
 function loadProductCategories() {
     $.get(`${API_URL}/ProductCategory/GetProductCategories`, function (data) {
@@ -140,6 +105,54 @@ function loadChartOfAccounts() {
 }
 
 // #endregion
+
+
+//#region userDefineFunctions
+function deleteMeasureUnit(recordID) {
+
+    $.ajax({
+        url: `${API_URL}/MeasureUnit/DeleteMeasureUnitById?mesureUnitId=` + recordID,
+        method: 'DELETE',
+        success: function (data) {
+            $(document).Toasts('create', {
+                class: 'bg-danger',
+                title: 'Deleted',
+                subtitle: '',
+                autohide: true,
+                delay: 750,
+                body: 'Record Deleted Successfully.'
+            });
+            $("#MeasureTable").DataTable().clear();
+            $("#MeasureTable").DataTable().ajax.reload();
+
+        },
+        error: function (err) {
+            console.log(err.responseText);
+        }
+    });
+
+
+}
+
+function measureUnitGET(recordId) {
+
+    $('#btnMeasureUnitCreate').attr('disabled', 'disabled');
+    $('#btnMeasureUnitUpdate').removeAttr('disabled');
+
+
+    $.get(`${API_URL}/MeasureUnit/GetMeasureUnitsById?mesureUnitId=${recordId}`, function (data) {
+        $('#hdnMeasureUnitId').val(data.id);
+        $('#txtMeasureUnit').val(data.name);
+    });
+
+}
+
+function EditCategory(data) {
+    debugger
+    $('input[name="name"]').val(data.name);
+}
+//#endregion
+
 
 
 // #region formData
@@ -282,12 +295,14 @@ $(function () {
             success: function (response) {
                 console.log(response);
                 debugger
+                
+
                 $("#MeasureTable").DataTable().clear();
                 $("#MeasureTable").DataTable().ajax.reload();
 
-                $(document).Toasts('update', {
+                $(document).Toasts('create', {
                     class: 'bg-success',
-                    title: 'Saved',
+                    title: 'Update',
                     subtitle: '',
                     autohide: true,
                     delay: 750,
