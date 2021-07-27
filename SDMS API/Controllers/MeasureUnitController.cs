@@ -43,7 +43,28 @@ namespace SDMS_API.Controllers
         [HttpDelete]
         public async Task<bool> DeleteMeasureUnitById(int mesureUnitId)
         {
+
+            var products = await _dbContext.Products.Where(x => x.MeasureUnitID == mesureUnitId).ToListAsync();
+            var productIds = await _dbContext.Products.Select(x => x.Id).ToListAsync();
+
+            if (products != null && products.Count > 0)
+            {
+                var productFormulaDetails = _dbContext.ProductFormulaDetails.Where(p => productIds.Contains(p.ProductId ?? 0));
+                var manufacturingDetails = _dbContext.ManufacturingDetails.Where(p => productIds.Contains(p.ProductId ?? 0));
+                var manufacturingMasterIds = await _dbContext.ManufacturingMasters.Select(x => x.Id).ToListAsync();
+                var manufacturingBillMasters = _dbContext.ManufacturingBillMasters.Where(m => manufacturingMasterIds.Contains(m.ManufacturingId ?? 0));
+
+                _dbContext.ManufacturingBillMasters.RemoveRange(manufacturingBillMasters);
+                _dbContext.ManufacturingDetails.RemoveRange(manufacturingDetails);
+                _dbContext.ProductFormulaDetails.RemoveRange(productFormulaDetails);
+
+
+                _dbContext.Products.RemoveRange(products);
+                await _dbContext.SaveChangesAsync();
+            }
+
             var result = await _dbContext.MeasureUnits.Where(x => x.Id == mesureUnitId).FirstOrDefaultAsync();
+
             if (result != null)
             {
                 _dbContext.MeasureUnits.Remove(result);
