@@ -13,6 +13,8 @@ namespace SDMS_API.ViewModels.Product
         public DateTime Date { get; set; }
         public string CategoryName { get; set; }
         public string MeasureUnitName { get; set; }
+        public decimal RetailPrice { get; set; }
+        public decimal ActualPrice { get; set; }
         public string Remarks { get; set; }
         public string Status { get; set; }
     }

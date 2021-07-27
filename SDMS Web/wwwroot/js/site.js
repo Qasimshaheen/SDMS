@@ -1,7 +1,7 @@
 ﻿const API_URL = `https://localhost:44309/api`;
 
 // #region LoadSelect
-function loadProducts() {
+function loadProductsForGrid() {
 
     $("#productTable").DataTable({
         ajax: {
@@ -17,8 +17,8 @@ function loadProducts() {
             { data: 'measureUnitName' },
             {
                 data: 'id', render: function (data, type, row, meta) {
-                    return "<button class='btn btn-info fas fa-edit mr-1'></button>" +
-                        "<button class='btn btn-danger fas fa-trash-alt mr-1'></button>";
+                    return `<button type="button" class="btn btn-info fas fa-edit mr-1" onClick=productGET('${row.id}')></button> 
+                            <button type="button" class="btn btn-danger fas fa-trash-alt mr-1" onClick=productDelete('${row.id}')></button>`;
                 }
             }
         ]
@@ -107,6 +107,25 @@ function loadChartOfAccounts() {
 
 
 //#region userDefineFunctions
+function productGET(recordId) {
+
+    $('#btnProductCreatebtnProductCategoryCreate').attr('disabled', 'disabled');
+    $('#btnProductUpdate').removeAttr('disabled');
+
+
+    $.get(`${API_URL}/Product/GetProductById?productId=${recordId}`, function (data) {
+        debugger
+        $('#hdnProductId').val(data.id);
+        $('#txtProductCode').val(data.code);
+        $('#txtProductName').val(data.name);
+        $('#txtRemarks').val(data.remarks);
+        $('#txtretailPrice').val(data.retailPrice);
+        $('#txtunitPrice').val(data.actualPrice);
+        $('#dtpProductDate').val(data.date);
+    });
+
+}
+
 function deleteMeasureUnit(recordID) {
 
     $.ajax({
@@ -132,7 +151,6 @@ function deleteMeasureUnit(recordID) {
 
 
 }
-
 function measureUnitGET(recordId) {
 
     $('#btnMeasureUnitCreate').attr('disabled', 'disabled');
@@ -218,7 +236,7 @@ $(function () {
             success: function (response) {
                 console.log(response);
 
-                loadProducts();
+                loadProductsForGrid();
 
                 $(document).Toasts('create', {
                     class: 'bg-success',
@@ -245,6 +263,18 @@ $(function () {
 
 
     });
+
+    $('body').on('click', '#btnProductReset', function () {
+        debugger
+
+        document.getElementById("frmProduct").reset();
+
+        //$(".js-select2").select2('val', '-- Please Select --');
+        $(".js-select2").val('0');
+        $('.js-select2').trigger('change');
+
+    });
+
 
     $('body').on('click', '#btnProductCategoryCreate', function () {
         debugger

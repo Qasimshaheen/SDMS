@@ -46,7 +46,10 @@ namespace SDMS_API.Controllers
                 Remarks = x.Remarks,
                 Status = x.IsActive ? "Active" : "Inactive",
                 CategoryName = x.TblProductCategory.Name,
-                MeasureUnitName = x.TblMeasureUnit.Name
+                MeasureUnitName = x.TblMeasureUnit.Name,
+                RetailPrice=x.RetailPrice,
+                ActualPrice=x.ActualPrice
+                
             }).FirstOrDefaultAsync();
             return result;
         }

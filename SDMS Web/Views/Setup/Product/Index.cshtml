@@ -10,6 +10,7 @@
 <section class="content">
 
     <form id="frmProduct">
+        <input type="hidden" id="hdnProductId" />
         <div class="row">
             <!-- left column -->
             <div class="col-md-6">
@@ -26,7 +27,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Product Code</label>
-                                    <input type="text" class="form-control" placeholder="PC-000000" disabled>
+                                    <input type="text" id="txtProductCode" class="form-control" placeholder="PC-000000" disabled>
                                 </div>
                             </div>
 
@@ -35,7 +36,7 @@
                                 <div class="form-group">
                                     <label>Date:</label>
                                     <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                        <input type="text" name="date" class="form-control datetimepicker-input" data-target="#reservationdate" />
+                                        <input id="dtpProductDate" type="text" name="date" class="form-control datetimepicker-input" data-target="#reservationdate" />
                                         <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -68,7 +69,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="productName">Product Name</label>
-                                    <input type="text" class="form-control" id="productName" name="name" placeholder="Enter product name..">
+                                    <input type="text" id="txtProductName" class="form-control" name="name" placeholder="Enter product name..">
                                 </div>
 
                             </div>
@@ -81,7 +82,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Rs</span>
                                         </div>
-                                        <input id="retailPrice" type="number" name="retailPrice" class="form-control" placeholder="125">
+                                        <input id="txtretailPrice" type="number" name="retailPrice" class="form-control" placeholder="125">
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +94,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Rs</span>
                                         </div>
-                                        <input id="unitPrice" type="number" name="actualPrice" class="form-control" placeholder="120">
+                                        <input id="txtunitPrice" type="number" name="actualPrice" class="form-control" placeholder="120">
                                     </div>
                                 </div>
                             </div>
@@ -102,22 +103,22 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="remarks">Remarks</label>
-                                    <textarea class="form-control" rows="2" name="remarks" id="remarks" placeholder="Enter Remarks ..."></textarea>
+                                    <textarea class="form-control" rows="2" name="remarks" id="txtRemarks" placeholder="Enter Remarks ..."></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                <input type="checkbox" name="isActive" class="custom-control-input" id="customSwitch3">
-                                <label class="custom-control-label" for="customSwitch3">Status</label>
+                                <input type="checkbox" name="isActive" class="custom-control-input" id="chkProduct">
+                                <label class="custom-control-label" for="chkProduct">Status</label>
                             </div>
                         </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
-                        <button type="submit" id="btnUpdate" class="btn btn-info" disabled>Update</button>
-                        <button type="submit" id="btnDelete" class="btn btn-danger">Delete</button>
+                        <button type="button" id="btnProductCreate" class="btn btn-primary">Submit</button>
+                        <button type="button" id="btnProductUpdate" class="btn btn-info" disabled>Update</button>
+                        <button type="button" id="btnProductReset" class="btn btn-secondary float-right">Reset</button>
                     </div>
                     <!--</form> -->
                 </div>
@@ -228,7 +229,7 @@
 
         })
 
-        loadProducts();
+        loadProductsForGrid();
         loadChartOfAccounts();
         loadProductCategories();
         loadMeasureUnits();
