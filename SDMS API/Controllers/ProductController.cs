@@ -44,12 +44,17 @@ namespace SDMS_API.Controllers
                 Code = x.Code,
                 Date = x.CreatedDate,
                 Remarks = x.Remarks,
-                Status = x.IsActive ? "Active" : "Inactive",
-                CategoryName = x.TblProductCategory.Name,
-                MeasureUnitName = x.TblMeasureUnit.Name,
+                //Status = x.IsActive ? "Active" : "Inactive",
+                Status=x.IsActive,
+                CategoryId=x.TblProductCategory.Id,
+                MeasureUnitId = x.TblMeasureUnit.Id,
                 RetailPrice=x.RetailPrice,
-                ActualPrice=x.ActualPrice
-                
+                ActualPrice=x.ActualPrice,
+                CostOfGoodsSoldCOAId=x.TblCostOfGoodsSoldChartOfAccount.Id,
+                InventoryCOAId=x.TblInventoryChartOfAccount.Id,
+                SaleCOAId=x.TblSaleChartOfAccount.Id,
+                SaleDiscountCOAId=x.TblSaleDiscountChartOfAccount.Id,
+                SaleReturnCOAId=x.TblSaleReturnChartOfAccount.Id
             }).FirstOrDefaultAsync();
             return result;
         }

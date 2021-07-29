@@ -122,6 +122,29 @@ function productGET(recordId) {
         $('#txtretailPrice').val(data.retailPrice);
         $('#txtunitPrice').val(data.actualPrice);
         $('#dtpProductDate').val(data.date);
+        $("#ddlProductUnit").select2("trigger", "select", {
+            data: { id: data.measureUnitId }
+        });
+        $("#ddlProductCategory").select2("trigger", "select", {
+            data: { id: data.categoryId }
+        });
+        $('#chkProduct').prop('checked', data.status == 1);
+        $("#ddlCostOfGodsSold").select2("trigger", "select", {
+            data: { id: data.costOfGoodsSoldCOAId}
+        });
+        $("#ddlInventory").select2("trigger", "select", {
+            data: { id: data.inventoryCOAId }
+        });
+        $("#ddlSales").select2("trigger", "select", {
+            data: { id: data.saleCOAId}
+        });
+        $("#ddlSalesDiscount").select2("trigger", "select", {
+            data: { id: data.saleDiscountCOAId}
+        });
+        $("#ddlSalesReturn").select2("trigger", "select", {
+            data: { id: data.saleReturnCOAId }
+        });
+
     });
 
 }
