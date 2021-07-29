@@ -57,8 +57,8 @@ function loadMeasureUnitsForGrid() {
             { data: 'name' },
             {
                 data: 'id', render: function (data, type, row, meta) {
-                    return `<button type="button" class="btn btn-info fas fa-edit mr-1" onClick=productCategoryGET('${row.id}')></button> 
-                            <button type="button" class="btn btn-danger fas fa-trash-alt mr-1" onClick=productCategoryDelete('${row.id}')></button>`;
+                    return `<button type="button" class="btn btn-info fas fa-edit mr-1" onClick=measureUnitGET('${row.id}')></button> 
+                            <button type="button" class="btn btn-danger fas fa-trash-alt mr-1" onClick=deleteMeasureUnit('${row.id}')></button>`;
                 }
             }
         ]
@@ -109,7 +109,7 @@ function loadChartOfAccounts() {
 //#region userDefineFunctions
 function productGET(recordId) {
 
-    $('#btnProductCreatebtnProductCategoryCreate').attr('disabled', 'disabled');
+    $('#btnProductCreate').attr('disabled', 'disabled');
     $('#btnProductUpdate').removeAttr('disabled');
 
 
@@ -130,16 +130,16 @@ function productGET(recordId) {
         });
         $('#chkProduct').prop('checked', data.status == 1);
         $("#ddlCostOfGodsSold").select2("trigger", "select", {
-            data: { id: data.costOfGoodsSoldCOAId}
+            data: { id: data.costOfGoodsSoldCOAId }
         });
         $("#ddlInventory").select2("trigger", "select", {
             data: { id: data.inventoryCOAId }
         });
         $("#ddlSales").select2("trigger", "select", {
-            data: { id: data.saleCOAId}
+            data: { id: data.saleCOAId }
         });
         $("#ddlSalesDiscount").select2("trigger", "select", {
-            data: { id: data.saleDiscountCOAId}
+            data: { id: data.saleDiscountCOAId }
         });
         $("#ddlSalesReturn").select2("trigger", "select", {
             data: { id: data.saleReturnCOAId }
@@ -147,6 +147,27 @@ function productGET(recordId) {
 
     });
 
+}
+function productDelete(recordId) {
+    $.ajax({
+        url: `${API_URL}/Product/DeleteProductById?productId=` + recordId,
+        method: 'DELETE',
+        success: function (date) {
+            $(document).Toasts('create', {
+                class: 'bg-danger',
+                title: 'Deleted',
+                subtitle: '',
+                autohide: true,
+                delay: 750,
+                body: 'Record Deleted Successfully.'
+            });
+            $("#productTable").DataTable().clear();
+            $("#productTable").DataTable().ajax.reload();
+        },
+        error: function (err) {
+            console.log(err.responseText);
+        }
+    });
 }
 
 function deleteMeasureUnit(recordID) {
@@ -175,7 +196,7 @@ function deleteMeasureUnit(recordID) {
 
 }
 function measureUnitGET(recordId) {
-
+    debugger
     $('#btnMeasureUnitCreate').attr('disabled', 'disabled');
     $('#btnMeasureUnitUpdate').removeAttr('disabled');
 
@@ -232,25 +253,23 @@ function productCategoryDelete(recordID) {
 // #region formData
 
 $(function () {
-    $("#frmProduct").submit(function (event) {
-        event.preventDefault();
 
+    $('body').on('click', '#btnProductCreate', function () {
         let frmData = {
-            "measureUnitId": $('select[name="measureUnitId"]').val(),
-            "productCategoryId": $('select[name="measureUnitId"]').val(),
-            "name": $('input[name="name"]').val(),
-            "date": $('input[name="date"]').val(),
-            "retailPrice": $('input[name="retailPrice"]').val(),
-            "actualPrice": $('input[name="actualPrice"]').val(),
-            "remarks": $('textarea[name="remarks"]').val(),
-            "isActive": true,
-            "costOfGoodsSoldCOAId": $('select[name="costOfGoodsSoldCOAId"]').val(),
-            "inventoryCOAId": $('select[name="inventoryCOAId"]').val(),
-            "saleCOAId": $('select[name="saleCOAId"]').val(),
-            "saleDiscountCOAId": $('select[name="saleDiscountCOAId"]').val(),
-            "saleReturnCOAId": $('select[name="saleReturnCOAId"]').val()
+            measureUnitId: $('#ddlProductUnit').val(),
+            productCategoryId: $('#ddlProductCategory').val(),
+            name: $('#txtProductName').val(),
+            date: $('#dtpProductDate').val(),
+            retailPrice: $('#txtretailPrice').val(),
+            actualPrice: $('#txtunitPrice').val(),
+            remarks: $('#txtRemarks').val(),
+            isActive: $('#chkProduct').prop('checked') == true ? true : false,
+            costOfGoodsSoldCOAId: $('#ddlCostOfGodsSold').val(),
+            inventoryCOAId: $('#ddlInventory').val(),
+            saleCOAId: $('#ddlSales').val(),
+            saleDiscountCOAId: $('#ddlSalesDiscount').val(),
+            saleReturnCOAId: $('#ddlSalesReturn').val()
         };
-
         $.ajax({
             url: `${API_URL}/Product/CreateProduct`,
             type: "POST",
@@ -258,9 +277,9 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-
-                loadProductsForGrid();
-
+                debugger
+                $("#productTable").DataTable().clear();
+                $("#productTable").DataTable().ajax.reload();
                 $(document).Toasts('create', {
                     class: 'bg-success',
                     title: 'Saved',
@@ -272,19 +291,69 @@ $(function () {
 
                 document.getElementById("frmProduct").reset();
 
-                //$(".js-select2").select2('val', '-- Please Select --');
                 $(".js-select2").val('0');
                 $('.js-select2').trigger('change');
-                //$('.js-select2').val(null).trigger('change');
-
-                //alert('Data Saved Succesfully!');
             },
             error: function (err) {
-                console.log(err);
+                console.log(err.responseText);
             }
         });
 
+    });
 
+    $('body').on('click', '#btnProductUpdate', function () {
+        debugger
+        let frmData = {
+            id: $('#hdnProductId').val(),
+            measureUnitId: $('#ddlProductUnit').val(),
+            productCategoryId: $('#ddlProductCategory').val(),
+            name: $('#txtProductName').val(),
+            date: $('#dtpProductDate').val(),
+            retailPrice: $('#txtretailPrice').val(),
+            actualPrice: $('#txtunitPrice').val(),
+            remarks: $('#txtRemarks').val(),
+            isActive: $('#chkProduct').prop('checked') == true ? true : false,
+            costOfGoodsSoldCOAId: $('#ddlCostOfGodsSold').val(),
+            inventoryCOAId: $('#ddlInventory').val(),
+            saleCOAId: $('#ddlSales').val(),
+            saleDiscountCOAId: $('#ddlSalesDiscount').val(),
+            saleReturnCOAId: $('#ddlSalesReturn').val()
+        };
+        $.ajax({
+            url: `${API_URL}/Product/EditProduct`,
+            type: "PUT",
+            data: JSON.stringify(frmData),
+            contentType: "application/json",
+            success: function (response) {
+                $("#productTable").DataTable().clear();
+                $("#productTable").DataTable().ajax.reload();
+                debugger
+                
+
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Update',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Updated Successfully.'
+                });
+
+
+
+                document.getElementById("frmProduct").reset();
+                $(".js-select2").val('0');
+                $('.js-select2').trigger('change');
+            },
+            error: function (err) {
+                console.log(err.responseText);
+            },
+            complete: function () {
+                $('#btnProductUpdate').attr('disabled', 'disabled');
+                $('#btnProductCreate').removeAttr('disabled');
+            }
+
+        });
     });
 
     $('body').on('click', '#btnProductReset', function () {
@@ -425,7 +494,7 @@ $(function () {
             success: function (response) {
                 console.log(response);
                 debugger
-                
+
 
                 $("#MeasureTable").DataTable().clear();
                 $("#MeasureTable").DataTable().ajax.reload();
