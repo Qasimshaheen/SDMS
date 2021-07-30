@@ -4,6 +4,8 @@
 function loadProductsForGrid() {
 
     $("#productTable").DataTable({
+        "responsive": true,
+        "autoWidth": false,
         ajax: {
 
             url: `${API_URL}/Product/GetProducts`,
@@ -28,6 +30,8 @@ function loadProductsForGrid() {
 function loadCategoriesForGrid() {
 
     $("#CategoryTable").DataTable({
+        "responsive": true,
+        "autoWidth": false,
         "ajax": {
             "url": `${API_URL}/ProductCategory/GetProductCategories`,
             "dataSrc": ''
@@ -49,6 +53,8 @@ function loadCategoriesForGrid() {
 function loadMeasureUnitsForGrid() {
 
     $("#MeasureTable").DataTable({
+        "responsive": true,
+        "autoWidth": false,
         "ajax": {
             "url": `${API_URL}/MeasureUnit/GetMeasureUnits`,
             "dataSrc": ''
