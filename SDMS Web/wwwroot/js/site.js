@@ -108,7 +108,19 @@ function loadChartOfAccounts() {
         });
     });
 }
+function loadProductForFormulaMaster() {
+    $.get(`${API_URL}/Product/GetProducts`, function (data) {
+        $('.js-select2').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
 
+        $(data).each((i, e) => {
+            $('.js-select2').append(`<option value="${e.id}">${e.code +' '+ e.name}</option>`);
+        });
+        $('.js-select2').select2({
+            theme: "bootstrap",
+            width: '100%!Important'
+        });
+    });
+}
 // #endregion
 
 
@@ -334,7 +346,7 @@ $(function () {
                 $("#productTable").DataTable().clear();
                 $("#productTable").DataTable().ajax.reload();
                 debugger
-                
+
 
                 $(document).Toasts('create', {
                     class: 'bg-success',
@@ -527,6 +539,31 @@ $(function () {
 
             }
         });
+    });
+
+
+    $('body').on('click', '#btnFormulaDetailAdd', function () {
+        debugger
+        var tblData = {
+            productName: $('#ddlProductDetails').select2('data'),
+            quantity: $('#txtQuantity').val()
+        };
+        $('#productFormulaDetailTable>tbody').append(
+            `<tr>
+                <td>${tblData.productName[0].text}</td>
+                <td>${tblData.quantity}</td>
+                <td>
+                    <button type="button" class="btn btn-info fas fa-edit mr-1" onClick=productGET('${tblData.productName[0].id}')></button>
+                    <button type="button" class="btn btn-danger fas fa-trash-alt" onClick=productDelete('${tblData.productName[0].id}')></button>
+</td>
+             </tr>
+        `);
+    });
+    $('body').on('click', '#btnProductFormulaReset', function () {
+        document.getElementById("frmProductFormula").reset();
+        $("#productFormulaDetailTable>tbody").html("");
+        $(".js-select2").val('0');
+        $('.js-select2').trigger('change');
     });
 
 });
