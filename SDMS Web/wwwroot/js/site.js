@@ -113,7 +113,7 @@ function loadProductForFormulaMaster() {
         $('.js-select2').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
 
         $(data).each((i, e) => {
-            $('.js-select2').append(`<option value="${e.id}">${e.code +' '+ e.name}</option>`);
+            $('.js-select2').append(`<option value="${e.id}">${e.name}</option>`);
         });
         $('.js-select2').select2({
             theme: "bootstrap",
@@ -553,17 +553,66 @@ $(function () {
                 <td>${tblData.productName[0].text}</td>
                 <td>${tblData.quantity}</td>
                 <td>
-                    <button type="button" class="btn btn-info fas fa-edit mr-1" onClick=productGET('${tblData.productName[0].id}')></button>
+                    <button type="button" class="btn btn-info fas fa-edit mr-1" id="btnEdit" value="${tblData.productName[0].id}" onClick=productGET('${tblData.productName[0].id}')></button>
                     <button type="button" class="btn btn-danger fas fa-trash-alt" onClick=productDelete('${tblData.productName[0].id}')></button>
 </td>
              </tr>
         `);
+        $('#txtQuantity').val(0);
+        $('#ddlProductDetails').val(0);
+        $('#ddlProductDetails').trigger('change');
     });
     $('body').on('click', '#btnProductFormulaReset', function () {
         document.getElementById("frmProductFormula").reset();
         $("#productFormulaDetailTable>tbody").html("");
         $(".js-select2").val('0');
         $('.js-select2').trigger('change');
+    });
+
+    $('body').on('click', '#btnProductFormulaCreate', function () {
+        var TableData = [];
+        debugger
+        $.each($('#productFormulaDetailTable tbody tr'), function () {
+            TableData.push({
+                productId: $(this).find('#btnEdit').val(),
+                quantity: $(this).find('td:eq(1)').html()
+            });
+
+        });
+        let frmData = {
+            productId: $('#ddlProduct').val(),
+            productFormulaDetails: TableData
+        };
+        $.ajax({
+            url: `${API_URL}/ProductFormula/CreateProductFormula`,
+            type: "POST",
+            data: JSON.stringify(frmData),
+            contentType: 'application/json',
+            success: function (response) {
+                debugger
+                console.log(response);
+                $("#productFormulaDetailTable>tbody").html("");
+
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Saved',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Added Successfully.'
+                });
+
+                document.getElementById("frmProductFormula").reset();
+
+                $(".js-select2").val('0');
+                $('.js-select2').trigger('change');
+
+            },
+            error: function (err) {
+                debugger
+                console.log(err);
+            }
+        });
     });
 
 });
