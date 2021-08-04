@@ -288,6 +288,27 @@ function productCategoryDelete(recordID) {
 
 }
 
+function productFormulaDelete(recordID) {
+    $.ajax({
+        url: `${API_URL}/ProductFormula/DeleteProductFormulaById?productFormulaId=` + recordID,
+        method: 'DELETE',
+        success: function (data) {
+            $(document).Toasts('create', {
+                class: 'bg-danger',
+                title: 'Deleted',
+                subtitle: '',
+                autohide: true,
+                delay: 750,
+                body: 'Record Deleted Successfully.'
+            });
+            $("#FormulaTable").DataTable().clear();
+            $("#FormulaTable").DataTable().ajax.reload();
+        },
+        error: function (err) {
+            console.log(err.responseText);
+        }
+    });
+}
 function productFormulaGET(recordID) {
     $('#btnProductFormulaCreate').attr('disabled', 'disabled');
     $('#btnProductFormulaUpdate').removeAttr('disabled');
@@ -592,7 +613,6 @@ $(function () {
     $('body').on('click', '.js-btnDeleteFormulaDetailProduct', function () {
         $(this).closest("tr").remove();
     });
-
     $('body').on('click', '#btnFormulaDetailAdd', function () {
         debugger
         var tblData = {
@@ -618,7 +638,6 @@ $(function () {
         $(".js-select2").val('0');
         $('.js-select2').trigger('change');
     });
-
     $('body').on('click', '#btnProductFormulaCreate', function () {
         var TableData = [];
         debugger
