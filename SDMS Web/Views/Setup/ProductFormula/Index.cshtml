@@ -10,6 +10,7 @@
         <div class="col-md-6">
             <div class="card card-secondary">
                 <form id="frmProductFormula">
+                    <input type="hidden" id="hdnProductFormulaId" />
                     <div class="card-header">
                         <h4 class="card-title">Formula Master</h4>
                     </div>
@@ -70,11 +71,30 @@
                 </form>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h4 class="card-title">Formula Table</h4>
+                </div>
+                <div class="card-body">
+                    <table id="FormulaTable" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Formula Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 @section Scripts{
     <script>
         loadProductForFormulaMaster();
+        loadProductFormulaMasterForGrid();
     </script>
 }

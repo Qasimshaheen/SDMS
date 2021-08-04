@@ -9,7 +9,7 @@ namespace SDMS_API.ViewModels.ProductFormulaMaster
     public class ProductFormulaMasterDetailVM
     {
         public int Id { get; set; }
-        public string ProductName { get; set; }
+        public int ProductId { get; set; }
         public IEnumerable<ProductFormulaDetailDetailVM> ProductFormulaDetails { get; set; }
     }
 }

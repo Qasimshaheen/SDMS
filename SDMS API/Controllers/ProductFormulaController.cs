@@ -43,7 +43,7 @@ namespace SDMS_API.Controllers
             var result = await _dbContext.ProductFormulaMasters.Where(x => x.Id == productFormulaId).Select(x => new ProductFormulaMasterDetailVM
             {
                 Id = x.Id,
-                ProductName = x.TblProduct.Name,
+                ProductId = x.TblProduct.Id,
                 ProductFormulaDetails = x.ProductFormulaDetails.Select(y => new ProductFormulaDetailDetailVM
                 {
                     Id = y.Id,

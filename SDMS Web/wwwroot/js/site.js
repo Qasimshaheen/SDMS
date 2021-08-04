@@ -108,6 +108,7 @@ function loadChartOfAccounts() {
         });
     });
 }
+
 function loadProductForFormulaMaster() {
     $.get(`${API_URL}/Product/GetProducts`, function (data) {
         $('.js-select2').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
@@ -119,6 +120,29 @@ function loadProductForFormulaMaster() {
             theme: "bootstrap",
             width: '100%!Important'
         });
+    });
+}
+function loadProductFormulaMasterForGrid() {
+    $("#FormulaTable").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        "ajax": {
+            "url": `${API_URL}/ProductFormula/GetProductFormulas`,
+            "dataSrc": ''
+        },
+        columnDefs: [
+            {targets:1,className:"text-center"}
+        ],
+        columns: [
+            { data: 'productName' },
+            {
+                data: 'id', render: function (data, type, row, meta) {
+                    return `<button type="button" title="Edit" class="btn btn-info fas fa-edit mr-1" onClick=productFormulaGET('${row.id}')></button> 
+                            <button type="button" title="Delete" class="btn btn-danger fas fa-trash-alt mr-1" onClick=productFormulaDelete('${row.id}')></button>
+                            <button type="button" title="View Details" class="btn btn-primary far fa-file-alt mr-1" onClick=productFormulaDetailsView('${row.id}')></button>`;
+                }
+            }
+        ]
     });
 }
 // #endregion
@@ -262,6 +286,30 @@ function productCategoryDelete(recordID) {
     });
 
 
+}
+
+function productFormulaGET(recordID) {
+    $('#btnProductFormulaCreate').attr('disabled', 'disabled');
+    $('#btnProductFormulaUpdate').removeAttr('disabled');
+    $("#productFormulaDetailTable>tbody").html("");
+
+    $.get(`${API_URL}/ProductFormula/GetProductFormulaById?productFormulaId=${recordID}`, function (data) {
+        debugger
+        $('#hdnProductFormulaId').val(data.id);
+        $('#ddlProduct').select2("trigger", "select", { data: { id: data.productId } });
+        $(data.productFormulaDetails).each((index, element) => {
+            $('#productFormulaDetailTable>tbody').append(
+                `<tr>
+                <td>${element.productName}</td>
+                <td>${element.quantity}</td>
+                <td>
+                    <button type="button" class="js-btnDeleteFormulaDetailProduct btn btn-danger fas fa-trash-alt"></button>
+                </td>
+             </tr>
+            `);
+        });
+
+    });
 }
 
 //#endregion
@@ -541,6 +589,9 @@ $(function () {
         });
     });
 
+    $('body').on('click', '.js-btnDeleteFormulaDetailProduct', function () {
+        $(this).closest("tr").remove();
+    });
 
     $('body').on('click', '#btnFormulaDetailAdd', function () {
         debugger
@@ -553,8 +604,7 @@ $(function () {
                 <td>${tblData.productName[0].text}</td>
                 <td>${tblData.quantity}</td>
                 <td>
-                    <button type="button" class="btn btn-info fas fa-edit mr-1" id="btnEdit" value="${tblData.productName[0].id}" onClick=productGET('${tblData.productName[0].id}')></button>
-                    <button type="button" class="btn btn-danger fas fa-trash-alt" onClick=productDelete('${tblData.productName[0].id}')></button>
+                    <button type="button" class="js-btnGETFormulaDetailProduct btn btn-danger fas fa-trash-alt" id="btnEdit" value="${tblData.productName[0].id}" onClick=productFormulaDetailDelete('${tblData.productName[0].id}')></button>
 </td>
              </tr>
         `);
