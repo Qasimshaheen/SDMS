@@ -131,7 +131,7 @@ function loadProductFormulaMasterForGrid() {
             "dataSrc": ''
         },
         columnDefs: [
-            {targets:1,className:"text-center"}
+            { targets: 1, className: "text-center" }
         ],
         columns: [
             { data: 'productName' },
@@ -139,7 +139,7 @@ function loadProductFormulaMasterForGrid() {
                 data: 'id', render: function (data, type, row, meta) {
                     return `<button type="button" title="Edit" class="btn btn-info fas fa-edit mr-1" onClick=productFormulaGET('${row.id}')></button> 
                             <button type="button" title="Delete" class="btn btn-danger fas fa-trash-alt mr-1" onClick=productFormulaDelete('${row.id}')></button>
-                            <button type="button" title="View Details" class="btn btn-primary far fa-file-alt mr-1" onClick=productFormulaDetailsView('${row.id}')></button>`;
+                            <button type="button" title="View Details" class="btn btn-primary fas fa-eye mr-1" onClick=productFormulaDetailsView('${row.id}')></button>`;
                 }
             }
         ]
@@ -324,7 +324,7 @@ function productFormulaGET(recordID) {
                 <td>${element.productName}</td>
                 <td>${element.quantity}</td>
                 <td>
-                    <button type="button" class="js-btnDeleteFormulaDetailProduct btn btn-danger fas fa-trash-alt"></button>
+                    <button type="button" id="btnEdit" value="${element.productId}" class="js-btnDeleteFormulaDetailProduct btn btn-danger fas fa-trash-alt"></button>
                 </td>
              </tr>
             `);
@@ -635,6 +635,10 @@ $(function () {
     $('body').on('click', '#btnProductFormulaReset', function () {
         document.getElementById("frmProductFormula").reset();
         $("#productFormulaDetailTable>tbody").html("");
+
+        $('#btnProductFormulaUpdate').attr('disabled', 'disabled');
+        $('#btnProductFormulaCreate').removeAttr('disabled');
+
         $(".js-select2").val('0');
         $('.js-select2').trigger('change');
     });
@@ -680,6 +684,54 @@ $(function () {
             error: function (err) {
                 debugger
                 console.log(err);
+            }
+        });
+    });
+    $('body').on('click', '#btnProductFormulaUpdate', function () {
+        debugger
+        var TableData = [];
+        $.each($('#productFormulaDetailTable tbody tr'), function () {
+            TableData.push({
+                productId: $(this).find('#btnEdit').val(),
+                quantity: $(this).find('td:eq(1)').html()
+            });
+        });
+        debugger
+        let frmData = {
+            id: $('#hdnProductFormulaId').val(),
+            productid: $('#ddlProduct').val(),
+            productFormulaDetails: TableData
+        };
+        $.ajax({
+            url: `${API_URL}/ProductFormula/EditProductFormulaById`,
+            type: "PUT",
+            data: JSON.stringify(frmData),
+            contentType: 'application/json',
+            success: function (response) {
+                console.log(response);
+                $("#productFormulaDetailTable>tbody").html("");
+
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Update',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Updated Successfully.'
+                });
+
+                document.getElementById("frmProductFormula").reset();
+
+                $(".js-select2").val('0');
+                $('.js-select2').trigger('change');
+            },
+            error: function (err) {
+                console.log(err);
+            },
+            complete: function () {
+                debugger
+                $('#btnProductFormulaUpdate').attr('disabled', 'disabled');
+                $('#btnProductFormulaCreate').removeAttr('disabled');
             }
         });
     });

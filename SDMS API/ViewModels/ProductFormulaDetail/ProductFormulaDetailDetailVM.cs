@@ -8,6 +8,7 @@ namespace SDMS_API.ViewModels.ProductFormulaDetail
     public class ProductFormulaDetailDetailVM
     {
         public int Id { get; set; }
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal Quantity { get; set; }
     }

@@ -47,6 +47,7 @@ namespace SDMS_API.Controllers
                 ProductFormulaDetails = x.ProductFormulaDetails.Select(y => new ProductFormulaDetailDetailVM
                 {
                     Id = y.Id,
+                    ProductId=y.TblProduct.Id,
                     ProductName = y.TblProduct.Name,
                     Quantity = y.Quantity
                 })
