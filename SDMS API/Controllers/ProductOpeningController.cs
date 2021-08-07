@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SDMS_API.Data;
+using SDMS_API.ExtensionMethods;
 using SDMS_API.ViewModels.ProductOpeningDetail;
 using SDMS_API.ViewModels.ProductOpeningMaster;
 
@@ -139,11 +140,14 @@ namespace SDMS_API.Controllers
         {
             if (openingMasterId != 0)
             {
-                var openingProducts = await _dbContext.ProductOpeningBalanceMasters.Where(x => x.Id == openingMasterId).Select(mMaster => new
+                var openingProducts = _dbContext.ProductOpeningBalanceMasters.Where(x => x.Id == openingMasterId).Select(mMaster => new
                 {
                     openingMaster = mMaster,
-                    openingDetail = mMaster.ProductOpeningBalanceDetails
-                }).FirstOrDefaultAsync();
+                    openingDetail = mMaster.ProductOpeningBalanceDetails,
+                    totalAmount = mMaster.ProductOpeningBalanceDetails.Sum(y => y.Amount),
+                    creditCOAId = _dbContext.ChartofAccounts.AsNoTracking().Where(x => x.Name.StartsWith("Capital") && x.IsDetailAccount == true).Select(y => new { y.Id }).FirstOrDefault(),
+                    debitCOAId= _dbContext.ChartofAccounts.AsNoTracking().Where(x => x.Name.StartsWith("Finished") && x.IsDetailAccount == true).Select(y => new { y.Id }).FirstOrDefault()
+                }).FirstOrDefault();
 
                 foreach (var masterDetailItem in openingProducts.openingDetail)
                 {
@@ -151,7 +155,7 @@ namespace SDMS_API.Controllers
                     {
                         Date = openingProducts.openingMaster.Date,
                         ProductId = masterDetailItem.ProductId,
-                        TransNo = "OB",
+                        TransNo = $"OB-{openingProducts.openingMaster.Id}",
                         Quantity = masterDetailItem.Quantity,
                         WarehouseId = masterDetailItem.WarehouseId,
                         BatchNo = masterDetailItem.BatchNo,
@@ -162,7 +166,59 @@ namespace SDMS_API.Controllers
                     };
                     await _dbContext.ProductLedgers.AddAsync(productLedger);
                 }
+
+                // Voucher Number Generation
+                string lastVoucherNumber = string.Empty;
+                var LastVoucherNumber = _dbContext.VoucherMasters.AsNoTracking().Where(x => x.VoucherNumber.StartsWith("JV")).OrderByDescending(x => x.Id).FirstOrDefault();
+                if (LastVoucherNumber != null)
+                    lastVoucherNumber = LastVoucherNumber.VoucherNumber;
+
+                var voucherMaster = new VoucherMaster
+                {
+                    Date = openingProducts.openingMaster.Date,
+                    VoucherType = "JV",
+                    VoucherNumber = lastVoucherNumber.GenerateNextCode("JV"),
+                    AddedBy = 1,
+                    AddedOn = DateTime.UtcNow.AddHours(5),
+                    Narration = "Openning Balance",
+                    IsPosted = true,
+                };
+
+                //Debit in Voucher Details
+                voucherMaster.VoucherDetails = openingProducts.openingDetail.Select(x => new VoucherDetail()
+                {
+                    COAId = openingProducts.creditCOAId.Id,
+                    IsDebit = true,
+                    VendorId = null,
+                    CustomerId = null,
+                    Amount = openingProducts.totalAmount,
+                    Remarks = null
+
+                }).ToList();
+
+                // Credit in Voucher Details
+                voucherMaster.VoucherDetails.Add(new VoucherDetail()
+                {
+                    COAId=openingProducts.debitCOAId.Id,
+                    IsDebit=true,
+                    VendorId=null,
+                    CustomerId=null,
+                    Amount=openingProducts.totalAmount,
+                    Remarks=null
+                });
+
+                voucherMaster.TotalDebit = voucherMaster.VoucherDetails.Where(x => x.IsDebit).Sum(x => x.Amount);
+                voucherMaster.TotalCredit = voucherMaster.VoucherDetails.Where(x => x.IsDebit == false).Sum(x => x.Amount);
+
+                await _dbContext.VoucherMasters.AddAsync(voucherMaster);
+
                 var count = await _dbContext.SaveChangesAsync();
+
+                openingProducts.openingMaster.VoucherMasterId = voucherMaster.Id;
+                openingProducts.openingMaster.IsPosted = true;
+
+                count = await _dbContext.SaveChangesAsync();
+
                 return count > 0;
             }
             else

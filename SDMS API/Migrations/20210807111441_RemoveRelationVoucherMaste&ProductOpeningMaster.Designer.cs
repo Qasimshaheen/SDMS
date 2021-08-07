@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SDMS_API.Data;
 
 namespace SDMS_API.Migrations
 {
     [DbContext(typeof(SDMSDbContext))]
-    partial class SDMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210807111441_RemoveRelationVoucherMaste&ProductOpeningMaster")]
+    partial class RemoveRelationVoucherMasteProductOpeningMaster
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -924,8 +926,6 @@ namespace SDMS_API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("VoucherMasterId");
 
                     b.ToTable("ProductOpeningBalanceMasters");
                 });
@@ -1876,13 +1876,6 @@ namespace SDMS_API.Migrations
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SDMS_API.Data.ProductOpeningBalanceMaster", b =>
-                {
-                    b.HasOne("SDMS_API.Data.VoucherMaster", "TblVoucherMaster")
-                        .WithMany("productOpeningBalanceMasters")
-                        .HasForeignKey("VoucherMasterId");
                 });
 
             modelBuilder.Entity("SDMS_API.Data.PurchaseDetail", b =>

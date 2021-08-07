@@ -44,6 +44,8 @@
     <Compile Remove="Migrations\20201101103138_AddedBillOfManufacturingEntites.Designer.cs" />
     <Compile Remove="Migrations\20201101103500_AddedBillOfManufacturingEntites.cs" />
     <Compile Remove="Migrations\20201101103500_AddedBillOfManufacturingEntites.Designer.cs" />
+    <Compile Remove="Migrations\20210807110919_UpdatedRelationVoucherMaster&amp;ProductOpeningMaster.cs" />
+    <Compile Remove="Migrations\20210807110919_UpdatedRelationVoucherMaster&amp;ProductOpeningMaster.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
