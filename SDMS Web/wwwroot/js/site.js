@@ -332,6 +332,29 @@ function productFormulaGET(recordID) {
 
     });
 }
+function productFormulaDetailsView(recordID) {
+    $('#btnProductFormulaCreate').attr('disabled', 'disabled');
+    $('#btnProductFormulaUpdate').attr('disabled', 'disabled');
+    $('#btnFormulaDetailAdd').attr('disabled', 'disabled');
+    $('#txtQuantity').attr('disabled', 'disabled');
+    $('#ddlProductDetails').attr('disabled', 'disabled');
+
+    $("#productFormulaDetailTable>tbody").html("");
+    $.get(`${API_URL}/ProductFormula/GetProductFormulaById?productFormulaId=${recordID}`, function (data) {
+        debugger
+        $('#hdnProductFormulaId').val(data.id);
+        $('#ddlProduct').select2("trigger", "select", { data: { id: data.productId } });
+        $(data.productFormulaDetails).each((index, element) => {
+            $('#productFormulaDetailTable>tbody').append(
+                `<tr>
+                <td>${element.productName}</td>
+                <td>${element.quantity}</td>
+             </tr>
+            `);
+        });
+
+    });
+}
 
 //#endregion
 
@@ -638,6 +661,9 @@ $(function () {
 
         $('#btnProductFormulaUpdate').attr('disabled', 'disabled');
         $('#btnProductFormulaCreate').removeAttr('disabled');
+        $('#btnFormulaDetailAdd').removeAttr('disabled');
+        $('#txtQuantity').removeAttr('disabled');
+        $('#ddlProductDetails').removeAttr('disabled');
 
         $(".js-select2").val('0');
         $('.js-select2').trigger('change');
