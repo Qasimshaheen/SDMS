@@ -140,14 +140,18 @@ namespace SDMS_API.Controllers
         {
             if (openingMasterId != 0)
             {
-                var openingProducts = _dbContext.ProductOpeningBalanceMasters.Where(x => x.Id == openingMasterId).Select(mMaster => new
+                var openingProducts = _dbContext.ProductOpeningBalanceMasters.AsNoTracking().Where(x => x.Id == openingMasterId).Select(mMaster => new
                 {
                     openingMaster = mMaster,
                     openingDetail = mMaster.ProductOpeningBalanceDetails,
-                    totalAmount = mMaster.ProductOpeningBalanceDetails.Sum(y => y.Amount),
-                    creditCOAId = _dbContext.ChartofAccounts.AsNoTracking().Where(x => x.Name.StartsWith("Capital") && x.IsDetailAccount == true).Select(y => new { y.Id }).FirstOrDefault(),
-                    debitCOAId= _dbContext.ChartofAccounts.AsNoTracking().Where(x => x.Name.StartsWith("Finished") && x.IsDetailAccount == true).Select(y => new { y.Id }).FirstOrDefault()
+                    totalAmount = mMaster.ProductOpeningBalanceDetails.Sum(y => y.Amount)
                 }).FirstOrDefault();
+
+                var COAIds = _dbContext.ChartofAccounts.AsNoTracking().Where(x => x.IsDetailAccount && (x.Name.StartsWith("Capital") || x.Name.StartsWith("Finished"))).Select(x => new
+                {
+                    x.Id,
+                    IsDebit = x.Name.StartsWith("Finished")
+                }).ToList();
 
                 foreach (var masterDetailItem in openingProducts.openingDetail)
                 {
@@ -182,30 +186,11 @@ namespace SDMS_API.Controllers
                     AddedOn = DateTime.UtcNow.AddHours(5),
                     Narration = "Openning Balance",
                     IsPosted = true,
+                    VoucherDetails = new List<VoucherDetail>()
                 };
 
-                //Debit in Voucher Details
-                voucherMaster.VoucherDetails = openingProducts.openingDetail.Select(x => new VoucherDetail()
-                {
-                    COAId = openingProducts.creditCOAId.Id,
-                    IsDebit = true,
-                    VendorId = null,
-                    CustomerId = null,
-                    Amount = openingProducts.totalAmount,
-                    Remarks = null
-
-                }).ToList();
-
-                // Credit in Voucher Details
-                voucherMaster.VoucherDetails.Add(new VoucherDetail()
-                {
-                    COAId=openingProducts.debitCOAId.Id,
-                    IsDebit=true,
-                    VendorId=null,
-                    CustomerId=null,
-                    Amount=openingProducts.totalAmount,
-                    Remarks=null
-                });
+                voucherMaster.VoucherDetails.Add(new VoucherDetail() { IsDebit = true, COAId = COAIds.FirstOrDefault(x => x.IsDebit).Id, Amount = openingProducts.totalAmount });
+                voucherMaster.VoucherDetails.Add(new VoucherDetail() { IsDebit = false, COAId = COAIds.FirstOrDefault(x => !x.IsDebit).Id, Amount = openingProducts.totalAmount });
 
                 voucherMaster.TotalDebit = voucherMaster.VoucherDetails.Where(x => x.IsDebit).Sum(x => x.Amount);
                 voucherMaster.TotalCredit = voucherMaster.VoucherDetails.Where(x => x.IsDebit == false).Sum(x => x.Amount);
@@ -214,8 +199,10 @@ namespace SDMS_API.Controllers
 
                 var count = await _dbContext.SaveChangesAsync();
 
-                openingProducts.openingMaster.VoucherMasterId = voucherMaster.Id;
-                openingProducts.openingMaster.IsPosted = true;
+                var ProductOpeningBalanceMasters = _dbContext.ProductOpeningBalanceMasters.Where(x => x.Id == openingMasterId).FirstOrDefault();
+
+                ProductOpeningBalanceMasters.VoucherMasterId = voucherMaster.Id;
+                ProductOpeningBalanceMasters.IsPosted = true;
 
                 count = await _dbContext.SaveChangesAsync();
 
