@@ -73,6 +73,30 @@ namespace SDMS_API.Controllers
             }).FirstOrDefaultAsync();
             return result;
         }
+        [HttpGet]
+        public IEnumerable<ProductLedgerBalanceByProductIdVM> GetProductLedgerBalanceByProductId(int productId)
+        {
+            var result = _dbContext.ProductLedgers
+                .Where(x => x.ProductId == productId).Select(x => new
+                {
+                    x.ProductId,
+                    x.BatchNo,
+                    x.WarehouseId,
+                    x.Quantity,
+                    x.IsOut
+                }).AsEnumerable()
+                .GroupBy(x => new { x.ProductId, x.BatchNo, x.WarehouseId })
+                .Select(x => new ProductLedgerBalanceByProductIdVM
+                {
+                    ProductId = x.Key.ProductId,
+                    BatchNo = x.Key.BatchNo,
+                    WarehouseId = x.Key.WarehouseId,
+                    Balance = (x.Where(y => !y.IsOut).Sum(y => y.Quantity) - x.Where(y => y.IsOut).Sum(y => y.Quantity))
+                }).Where(x => x.Balance > 0).ToList();
+
+            return result;
+        }
+
         [HttpDelete]
         public async Task<bool> DeleteProductLedgerById(int productLedgerId)
         {
