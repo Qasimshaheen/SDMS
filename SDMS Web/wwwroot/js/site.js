@@ -111,15 +111,28 @@ function loadChartOfAccounts() {
 
 function loadProductForFormulaMaster() {
     $.get(`${API_URL}/Product/GetProducts`, function (data) {
-        $('.js-select2').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
+        $('#ddlWarehouseId').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
 
         $(data).each((i, e) => {
-            $('.js-select2').append(`<option value="${e.id}">${e.name}</option>`);
+            $('#ddlWarehouseId').append(`<option value="${e.id}">${e.name}</option>`);
         });
-        $('.js-select2').select2({
+        $('#ddlWarehouseId').select2({
             theme: "bootstrap",
             width: '100%!Important'
         });
+    });
+}
+function loadProductForManufactureMaster() {
+    $.get(`${API_URL}/Product/GetProducts`, function (data) {
+        $('#ddlFormulaMasterProductId').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
+
+        $(data).each((i, e) => {
+            $('#ddlFormulaMasterProductId').append(`<option value="${e.id}">${e.name}</option>`);
+        });
+        //$('.js-select2').select2({
+        //    theme: "bootstrap",
+        //    width: '100%!Important'
+        //});
     });
 }
 function loadProductFormulaMasterForGrid() {
@@ -133,18 +146,49 @@ function loadProductFormulaMasterForGrid() {
         columnDefs: [
             { targets: 1, className: "text-center" }
         ],
+    });
+}
+function loadFormulaForManufactureLookup() {
+    debugger
+    $("#FormullookupTable").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        "ordering": false,
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "ajax": {
+            "url": `${API_URL}/ProductFormula/GetProductFormulas`,
+            "dataSrc": ''
+        },
+        columnDefs: [
+            { targets: 1, className: "text-center" }
+        ],
         columns: [
             { data: 'productName' },
             {
                 data: 'id', render: function (data, type, row, meta) {
-                    return `<button type="button" title="Edit" class="btn btn-info fas fa-edit mr-1" onClick=productFormulaGET('${row.id}')></button> 
-                            <button type="button" title="Delete" class="btn btn-danger fas fa-trash-alt mr-1" onClick=productFormulaDelete('${row.id}')></button>
-                            <button type="button" title="View Details" class="btn btn-primary fas fa-eye mr-1" onClick=productFormulaDetailsView('${row.id}')></button>`;
+                    return `<button type="button" title="Edit" data-dismiss="modal" class="btn btn-info fas fa-edit mr-1" onClick=FormulaForManufacturingGET('${row.id}')></button>`;
                 }
             }
         ]
     });
 }
+function loadWarehouseForddl() {
+    $.get(`${API_URL}/Warehouse/GetWarehouses`, function (data) {
+        $('#ddlWarehouseId').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
+
+        $(data).each((i, e) => {
+            $('#ddlWarehouseId').append(`<option value="${e.id}">${e.name}</option>`);
+        });
+        $('#ddlWarehouseId').select2({
+            theme: "bootstrap",
+            width: '100%!Important'
+        });
+
+    });
+}
+
 // #endregion
 
 
@@ -356,6 +400,43 @@ function productFormulaDetailsView(recordID) {
     });
 }
 
+function FormulaForManufacturingGET(recordID) {
+    $('#productManufactureDetailTable>tbody').html("");
+    $('#productRawMaterialTable>tbody').html("");
+    $.get(`${API_URL}/ProductFormula/GetProductFormulaById?productFormulaId=${recordID}`, function (data) {
+        debugger
+        $('#hdnFormulaMasterId').val(data.id);
+        $('#ddlFormulaMasterProductId').val(data.productId);
+        $(data.productFormulaDetails).each((index, element) => {
+            $('#productManufactureDetailTable>tbody').append(
+                `<tr>
+                    <td>${element.productName}</td>
+                    <td>${element.quantity}</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td><input  type="radio" onClick=RawMaterialForManufacturingGET('${element.productId}')  name="radioFinishGoodSelect"></td>
+                </tr>`
+            );
+        });
+
+    });
+}
+function RawMaterialForManufacturingGET(recordID) {
+    $('#productRawMaterialTable>tbody').html("");
+    debugger
+    $.get(`${API_URL}/ProductLedger/GetProductLedgerBalanceByProductId?productId=${recordID}`, function (data) {
+        $.each((data), function (i, e) {
+            $('#productRawMaterialTable>tbody').append(
+                `<tr>
+                    <td>${ e.warehouseId}</td>
+                    <td>${e.batchNo}</td>
+                    <td>${e.balance} Pcs</td>
+                    <td><input  type="number" class="form-control js-Raw-Material__Quantity" min="0" placeholder="0" ></td>
+                </tr>`
+            );
+        });
+    });
+}
 //#endregion
 
 
@@ -363,6 +444,34 @@ function productFormulaDetailsView(recordID) {
 // #region formData
 
 $(function () {
+
+
+    //$('body').on('click', '#productManufactureDetailTable tbody tr', function () {
+    //    debugger
+    //    $(this).find('td:nth-child(5)').first('input[type="radio"]').prop('checked',true);
+    //})
+
+    $('body').on('blur', '.js-Raw-Material__Quantity', function () {
+        var sumInsertedQuantity=0;
+        let availableQty = parseInt($(this).closest('tr').find('td:nth-child(3)').text());
+        let requiredQty = parseInt($('input[name="radioFinishGoodSelect"]:checked').closest('tr').find('td:nth-child(3)').text());
+        let rawMaterialQuantites = $('#productRawMaterialTable').find('.js-Raw-Material__Quantity');
+
+        $.each($(rawMaterialQuantites), function (index, element) {
+            sumInsertedQuantity += parseInt(this.value ? this.value : 0);
+        })
+
+        debugger
+
+        let inputValue = +$(this).val();
+
+        let validCase = inputValue <= requiredQty && inputValue <= availableQty && inputValue >= 0 && sumInsertedQuantity <= requiredQty;
+
+        if (!validCase)
+            $(this).addClass('is-invalid');
+        else
+            $(this).removeClass('is-invalid');
+    })
 
     $('body').on('click', '#btnProductCreate', function () {
         let frmData = {
@@ -647,7 +756,7 @@ $(function () {
                 <td>${tblData.productName[0].text}</td>
                 <td>${tblData.quantity}</td>
                 <td>
-                    <button type="button" class="js-btnGETFormulaDetailProduct btn btn-danger fas fa-trash-alt" id="btnEdit" value="${tblData.productName[0].id}" onClick=productFormulaDetailDelete('${tblData.productName[0].id}')></button>
+                    <button type="button" class="js-btnDeleteFormulaDetailProduct btn btn-danger fas fa-trash-alt" id="btnEdit" value="${tblData.productName[0].id}"></button>
 </td>
              </tr>
         `);
@@ -761,6 +870,34 @@ $(function () {
             }
         });
     });
+    $('body').on('click', '#btnManufactureReset', function () {
+        document.getElementById("frmManufacturing").reset();
+        $("#productManufactureDetailTable>tbody").html("");
+        $("#productRawMaterialTable>tbody").html("");
+        $("#btn‏ManufactureUpdate").attr('disabled', 'disabled');
+        $("#btn‏ManufactureCreate").removeAttr('disabled');
+
+        $(".js-select2").val('0');
+        $('.js-select2').trigger('change');
+    });
+
+
+    $('body').on('blur', '#txtQuantity', function () {
+        debugger
+        var quantity = +$(this).val();
+        if (!quantity)
+            $(this).addClass('is-invalid');
+        else
+            $(this).removeClass('is-invalid');
+        $.each($('#productManufactureDetailTable tbody tr'),
+
+            function (i, e) {
+                var unit = +$(this).find('td:nth-child(2)').text();
+                $(this).find('td:nth-child(3)').text(quantity * unit);
+            });
+
+    });
+
 
 });
 // #endregion
