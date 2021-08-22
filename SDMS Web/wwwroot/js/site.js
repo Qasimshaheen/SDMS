@@ -111,12 +111,12 @@ function loadChartOfAccounts() {
 
 function loadProductForFormulaMaster() {
     $.get(`${API_URL}/Product/GetProducts`, function (data) {
-        $('#ddlWarehouseId').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
+        $('.js-select2').append(`<option disabled selected readonly value="0">-- Please Select --</option>`);
 
         $(data).each((i, e) => {
-            $('#ddlWarehouseId').append(`<option value="${e.id}">${e.name}</option>`);
+            $('.js-select2').append(`<option value="${e.id}">${e.name}</option>`);
         });
-        $('#ddlWarehouseId').select2({
+        $('.js-select2').select2({
             theme: "bootstrap",
             width: '100%!Important'
         });
@@ -143,13 +143,23 @@ function loadProductFormulaMasterForGrid() {
             "url": `${API_URL}/ProductFormula/GetProductFormulas`,
             "dataSrc": ''
         },
+        columns: [
+            { data: 'productName' },
+            {
+                data: 'id', render: function (data, type, row, meta) {
+                    return `<button type="button" class="btn btn-info  fas fa-edit mr-1" onClick=productFormulaGET('${row.id}')></button> 
+                            <button type="button" class="btn btn-primary fas fa-eye mr-1" onClick=productFormulaDetailsView('${row.id}')></button>
+                            <button type="button" class="btn btn-danger fas fa-trash-alt mr-1" onClick=productFormulaDelete('${row.id}')></button>`;
+
+                }
+            }],
         columnDefs: [
             { targets: 1, className: "text-center" }
         ],
     });
 }
 function loadFormulaForManufactureLookup() {
-    
+
     $("#FormullookupTable").DataTable({
         "responsive": true,
         "autoWidth": false,
@@ -200,7 +210,7 @@ function productGET(recordId) {
 
 
     $.get(`${API_URL}/Product/GetProductById?productId=${recordId}`, function (data) {
-        
+
         $('#hdnProductId').val(data.id);
         $('#txtProductCode').val(data.code);
         $('#txtProductName').val(data.name);
@@ -282,7 +292,7 @@ function deleteMeasureUnit(recordID) {
 
 }
 function measureUnitGET(recordId) {
-    
+
     $('#btnMeasureUnitCreate').attr('disabled', 'disabled');
     $('#btnMeasureUnitUpdate').removeAttr('disabled');
 
@@ -359,7 +369,7 @@ function productFormulaGET(recordID) {
     $("#productFormulaDetailTable>tbody").html("");
 
     $.get(`${API_URL}/ProductFormula/GetProductFormulaById?productFormulaId=${recordID}`, function (data) {
-        
+
         $('#hdnProductFormulaId').val(data.id);
         $('#ddlProduct').select2("trigger", "select", { data: { id: data.productId } });
         $(data.productFormulaDetails).each((index, element) => {
@@ -385,7 +395,7 @@ function productFormulaDetailsView(recordID) {
 
     $("#productFormulaDetailTable>tbody").html("");
     $.get(`${API_URL}/ProductFormula/GetProductFormulaById?productFormulaId=${recordID}`, function (data) {
-        
+
         $('#hdnProductFormulaId').val(data.id);
         $('#ddlProduct').select2("trigger", "select", { data: { id: data.productId } });
         $(data.productFormulaDetails).each((index, element) => {
@@ -401,6 +411,7 @@ function productFormulaDetailsView(recordID) {
 }
 
 function FormulaForManufacturingGET(recordID) {
+    localStorage.removeItem('state');
     $('#productManufactureDetailTable>tbody').html("");
     $('#productRawMaterialTable>tbody').html("");
     $.get(`${API_URL}/ProductFormula/GetProductFormulaById?productFormulaId=${recordID}`, function (data) {
@@ -421,10 +432,7 @@ function FormulaForManufacturingGET(recordID) {
 
     });
 }
-
-function RawMaterialForManufacturingGET(recordID) {
-
-    debugger
+function localStorageManagement(recordID) {
     var state = localStorage.getItem('state');
 
     if (state) {
@@ -432,9 +440,9 @@ function RawMaterialForManufacturingGET(recordID) {
         state.previousProductId = state.currentProductId;
         state.currentProductId = recordID;
 
-        if (state.previousProductId != state.currentProductId) {
-            state[`productId_${state.previousProductId}`] = getCurrentRawMaterials();
-        }
+        //if (state.previousProductId != state.currentProductId) {
+        state[`productId_${state.previousProductId}`] = getCurrentRawMaterials();
+        //}
     }
     else {
         var state = {
@@ -446,8 +454,17 @@ function RawMaterialForManufacturingGET(recordID) {
 
     localStorage.setItem('state', JSON.stringify(state));
 
+}
+function RawMaterialForManufacturingGET(recordID) {
+
+    localStorageManagement(recordID);
 
     $('#productRawMaterialTable>tbody').html("");
+
+    var state = localStorage.getItem('state');
+    if (state)
+        state = JSON.parse(state);
+
 
     if (state[`productId_${recordID}`]) {
         renderRawMaterials(state[`productId_${recordID}`]);
@@ -456,7 +473,7 @@ function RawMaterialForManufacturingGET(recordID) {
         $.get(`${API_URL}/ProductLedger/GetProductLedgerBalanceByProductId?productId=${recordID}`, function (data) {
             renderRawMaterials(data);
         });
-    }   
+    }
 }
 
 
@@ -464,7 +481,7 @@ function renderRawMaterials(data) {
     $.each((data), function (i, e) {
         $('#productRawMaterialTable>tbody').append(
             `<tr>
-                    <td>${e.warehouseId}</td>
+                    <td>${e.warehouseId} ${e.warehouseName}</td>
                     <td>${e.batchNo}</td>
                     <td>${e.balance} Pcs</td>
                     <td><input  type="number" value="${e.rawQuantity || 0}" class="form-control js-Raw-Material__Quantity" min="0" placeholder="0" ></td>
@@ -486,15 +503,16 @@ function getCurrentRawMaterials() {
     let rawMaterials = [];
 
     $.each($('#productRawMaterialTable tbody tr'), function () {
-        
 
-        let warehouseId = +$(this).find('td:nth-child(1)').text();
+        let warehouseId = parseInt($(this).find('td:nth-child(1)').text());
+        let warehouseName = $(this).find('td:nth-child(1)').text().substring(2);
         let batchNo = $(this).find('td:nth-child(2)').text();
         let balance = parseInt($(this).find('td:nth-child(3)').text());
         let rawQuantity = +$(this).find('td:nth-child(4) input[type="number"]').val();
 
         rawMaterials.push({
             warehouseId: warehouseId,
+            warehouseName: warehouseName,
             batchNo: batchNo,
             balance: balance,
             rawQuantity: rawQuantity
@@ -504,6 +522,28 @@ function getCurrentRawMaterials() {
 
     return rawMaterials;
 
+}
+
+function getRawMaterialsFromStateByProductId(recordID) {
+    let rawMaterials = [];
+
+    var state = localStorage.getItem('state');
+
+    state = JSON.parse(state);
+
+    if (state[`productId_${recordID}`]) {
+
+        $.each((state[`productId_${recordID}`]), function (index, element) {
+            if (element.rawQuantity)
+                rawMaterials.push({
+                    warehouseId: element.warehouseId,
+                    batchNo: element.batchNo,
+                    quantity: element.rawQuantity
+                });
+        });
+    }
+
+    return rawMaterials;
 }
 
 
@@ -522,13 +562,13 @@ $(function () {
     //})
 
     $('body').on('blur', '.js-Raw-Material__Quantity', function () {
-        var sumInsertedQuantity = 0;
-        let availableQty = parseInt($(this).closest('tr').find('td:nth-child(3)').text());
-        let requiredQty = parseInt($('input[name="radioFinishGoodSelect"]:checked').closest('tr').find('td:nth-child(3)').text());
+        let sumInsertedQuantity = 0;
+        let availableQty = parseFloat($(this).closest('tr').find('td:nth-child(3)').text());
+        let requiredQty = parseFloat($('input[name="radioFinishGoodSelect"]:checked').closest('tr').find('td:nth-child(3)').text());
         let rawMaterialQuantites = $('#productRawMaterialTable').find('.js-Raw-Material__Quantity');
 
         $.each($(rawMaterialQuantites), function (index, element) {
-            sumInsertedQuantity += parseInt(this.value ? this.value : 0);
+            sumInsertedQuantity += parseFloat(this.value ? this.value : 0);
         })
 
         let inputValue = +$(this).val();
@@ -538,7 +578,9 @@ $(function () {
         if (!validCase)
             $(this).addClass('is-invalid');
         else {
-            $(this).removeClass('is-invalid');
+            $.each($('#productRawMaterialTable tbody tr'), function (index, element) {
+                $(this).find('.js-Raw-Material__Quantity').removeClass('is-invalid');
+            });
         }
     })
 
@@ -565,7 +607,7 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-                
+
                 $("#productTable").DataTable().clear();
                 $("#productTable").DataTable().ajax.reload();
                 $(document).Toasts('create', {
@@ -590,7 +632,7 @@ $(function () {
     });
 
     $('body').on('click', '#btnProductUpdate', function () {
-        
+
         let frmData = {
             id: $('#hdnProductId').val(),
             measureUnitId: $('#ddlProductUnit').val(),
@@ -615,7 +657,7 @@ $(function () {
             success: function (response) {
                 $("#productTable").DataTable().clear();
                 $("#productTable").DataTable().ajax.reload();
-                
+
 
 
                 $(document).Toasts('create', {
@@ -645,7 +687,7 @@ $(function () {
     });
 
     $('body').on('click', '#btnProductReset', function () {
-        
+
 
         document.getElementById("frmProduct").reset();
 
@@ -657,7 +699,7 @@ $(function () {
 
 
     $('body').on('click', '#btnProductCategoryCreate', function () {
-        
+
         let frmData = {
             name: $('#txtProductCategoryName').val()
         };
@@ -668,7 +710,7 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-                
+
                 $("#CategoryTable").DataTable().clear();
                 $("#CategoryTable").DataTable().ajax.reload();
 
@@ -691,7 +733,7 @@ $(function () {
     });
 
     $('body').on('click', '#btnProductCategoryUpdate', function () {
-        
+
         let frmData = {
             id: $('#hdnProductCategoryId').val(),
             name: $('#txtProductCategoryName').val()
@@ -703,7 +745,7 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-                
+
 
 
                 $("#CategoryTable").DataTable().clear();
@@ -735,7 +777,7 @@ $(function () {
 
 
     $('body').on('click', '#btnMeasureUnitCreate', function () {
-        
+
         let frmData = {
             name: $('#txtMeasureUnit').val()
         };
@@ -746,7 +788,7 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-                
+
                 $("#MeasureTable").DataTable().clear();
                 $("#MeasureTable").DataTable().ajax.reload();
 
@@ -769,7 +811,7 @@ $(function () {
     });
 
     $('body').on('click', '#btnMeasureUnitUpdate', function () {
-        
+
         let frmData = {
             id: $('#hdnMeasureUnitId').val(),
             name: $('#txtMeasureUnit').val()
@@ -781,7 +823,7 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 console.log(response);
-                
+
 
 
                 $("#MeasureTable").DataTable().clear();
@@ -815,8 +857,8 @@ $(function () {
         $(this).closest("tr").remove();
     });
     $('body').on('click', '#btnFormulaDetailAdd', function () {
-        
-        var tblData = {
+
+        let tblData = {
             productName: $('#ddlProductDetails').select2('data'),
             quantity: $('#txtQuantity').val()
         };
@@ -847,8 +889,8 @@ $(function () {
         $('.js-select2').trigger('change');
     });
     $('body').on('click', '#btnProductFormulaCreate', function () {
-        var TableData = [];
-        
+        let TableData = [];
+
         $.each($('#productFormulaDetailTable tbody tr'), function () {
             TableData.push({
                 productId: $(this).find('#btnEdit').val(),
@@ -860,6 +902,7 @@ $(function () {
             productId: $('#ddlProduct').val(),
             productFormulaDetails: TableData
         };
+        
         $.ajax({
             url: `${API_URL}/ProductFormula/CreateProductFormula`,
             type: "POST",
@@ -867,7 +910,10 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 
-                console.log(response);
+                $("#FormulaTable").DataTable().clear();
+                $("#FormulaTable").DataTable().ajax.reload();
+
+                
                 $("#productFormulaDetailTable>tbody").html("");
 
                 $(document).Toasts('create', {
@@ -886,21 +932,21 @@ $(function () {
 
             },
             error: function (err) {
-                
+
                 console.log(err);
             }
         });
     });
     $('body').on('click', '#btnProductFormulaUpdate', function () {
-        
-        var TableData = [];
+
+        let TableData = [];
         $.each($('#productFormulaDetailTable tbody tr'), function () {
             TableData.push({
                 productId: $(this).find('#btnEdit').val(),
                 quantity: $(this).find('td:eq(1)').html()
             });
         });
-        
+
         let frmData = {
             id: $('#hdnProductFormulaId').val(),
             productid: $('#ddlProduct').val(),
@@ -933,12 +979,13 @@ $(function () {
                 console.log(err);
             },
             complete: function () {
-                
+
                 $('#btnProductFormulaUpdate').attr('disabled', 'disabled');
                 $('#btnProductFormulaCreate').removeAttr('disabled');
             }
         });
     });
+
     $('body').on('click', '#btnManufactureReset', function () {
         document.getElementById("frmManufacturing").reset();
         $("#productManufactureDetailTable>tbody").html("");
@@ -949,11 +996,9 @@ $(function () {
         $(".js-select2").val('0');
         $('.js-select2').trigger('change');
     });
-
-
     $('body').on('blur', '#txtQuantity', function () {
-        
-        var quantity = +$(this).val();
+
+        let quantity = +$(this).val();
         if (!quantity)
             $(this).addClass('is-invalid');
         else
@@ -961,11 +1006,67 @@ $(function () {
         $.each($('#productManufactureDetailTable tbody tr'),
 
             function (i, e) {
-                var unit = +$(this).find('td:nth-child(2)').text();
+                let unit = +$(this).find('td:nth-child(2)').text();
                 $(this).find('td:nth-child(3)').text(quantity * unit);
             });
 
     });
+    $('body').on('click', '#btnManufactureCreate', function () {
+        let tableData = [];
+        localStorageManagement($('input[name="radioFinishGoodSelect"]:checked').val());
+
+        $.each($('#productManufactureDetailTable tbody tr'), function (index, element) {
+            
+            let currentProductId = $(this).find('input[name="radioFinishGoodSelect"]').val();
+            tableData.push({
+                productId: currentProductId,
+                manufacturingRawDetails: getRawMaterialsFromStateByProductId(currentProductId)
+            });
+        });
+
+        let frmData = {
+            formulaMasterId: $('#hdnFormulaMasterId').val(),
+            productId: $('#ddlFormulaMasterProductId').val(),
+            date: $('#dtpManufactureDate').val(),
+            batchNo: $('#txtBatchNo').val(),
+            warehouseId: $('#ddlWarehouseId').val(),
+            quantity: $('#txtQuantity').val(),
+            isPosted: false,
+            addedBy: 1,
+            addedOn: $('#dtpManufactureDate').val(),
+            manufacturingDetails: tableData
+        };
+        
+        $.ajax({
+            url: `${API_URL}/Manufacturing/CreateManufacturing`,
+            type: "POST",
+            data: JSON.stringify(frmData),
+            contentType: 'application/json',
+            success: function (response) {
+                
+                $("#productManufactureDetailTable>tbody").html("");
+                $("#productRawMaterialTable>tbody").html("");
+
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Saved',
+                    subtitle: '',
+                    autohide: true,
+                    delay: 750,
+                    body: 'Record Added Successfully.'
+                });
+
+                document.getElementById("frmManufacturing").reset();
+
+                $(".js-select2").val('0');
+                $('.js-select2').trigger('change');
+            },
+            error: function (err) {
+                
+                console.log(err);
+            }
+        });
+    })
 
 
 });

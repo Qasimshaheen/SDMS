@@ -82,15 +82,17 @@ namespace SDMS_API.Controllers
                     x.ProductId,
                     x.BatchNo,
                     x.WarehouseId,
+                    x.TblWarehouse.Name,
                     x.Quantity,
                     x.IsOut
                 }).AsEnumerable()
-                .GroupBy(x => new { x.ProductId, x.BatchNo, x.WarehouseId })
+                .GroupBy(x => new { x.ProductId, x.BatchNo, x.WarehouseId,x.Name })
                 .Select(x => new ProductLedgerBalanceByProductIdVM
                 {
                     ProductId = x.Key.ProductId,
                     BatchNo = x.Key.BatchNo,
                     WarehouseId = x.Key.WarehouseId,
+                    WarehouseName=x.Key.Name,
                     Balance = (x.Where(y => !y.IsOut).Sum(y => y.Quantity) - x.Where(y => y.IsOut).Sum(y => y.Quantity))
                 }).Where(x => x.Balance > 0).ToList();
 

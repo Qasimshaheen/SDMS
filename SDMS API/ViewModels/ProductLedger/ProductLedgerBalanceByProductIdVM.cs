@@ -11,5 +11,6 @@ namespace SDMS_API.ViewModels.ProductLedger
         public decimal Balance { get; set; }
         public string BatchNo { get; set; }
         public int WarehouseId { get; set; }
+        public string WarehouseName { get; set; }
     }
 }
